@@ -432,7 +432,7 @@ export default function App() {
     price: string;
     status: "Active" | "Expired";
   }>({
-    planName: "Monthly Pass (30 Days)",
+    planName: "30 Days Pass",
     gymName: "Iron Zone Fitness",
     validUntil: "June 24, 2026",
     price: "₱2,200",
@@ -1023,7 +1023,7 @@ export default function App() {
                           {[
                             { name: "Day Pass", duration: "1 Day", price: "₱150", desc: "Single entry access" },
                             { name: "Weekly Fit", duration: "7 Days", price: "₱700", desc: "7 days full gym access" },
-                            { name: "Monthly Pass (30 Days)", duration: "30 Days", price: "₱2,200", desc: "30 days full gym access" },
+                            { name: "30 Days Pass", duration: "30 Days", price: "₱2,200", desc: "30 days full gym access" },
                             { name: "Quarterly Pass", duration: "90 Days", price: "₱5,800", desc: "Includes free assessment" },
                           ].map((plan) => (
                             <div
@@ -1698,8 +1698,8 @@ export default function App() {
                           </thead>
                           <tbody className="divide-y divide-gray-100">
                             {[
-                              { name: "John Dela Cruz", plan: "Monthly Pass (30 Days)", start: "May 24", renewal: "Jun 24", status: "Active" },
-                              { name: "Jamie Santos", plan: "Monthly Pass (30 Days)", start: "May 2", renewal: "Jun 2", status: "Active" },
+                              { name: "John Dela Cruz", plan: "30 Days Pass", start: "May 24", renewal: "Jun 24", status: "Active" },
+                              { name: "Jamie Santos", plan: "30 Days Pass", start: "May 2", renewal: "Jun 2", status: "Active" },
                               { name: "Bea Cruz", plan: "Weekly Pass", start: "May 20", renewal: "May 27", status: "Renewal Due" },
                               { name: "Nicole Garcia", plan: "Quarterly Pass", start: "Jan 15", renewal: "Apr 15", status: "Active" },
                             ].map((row) => (
@@ -1984,7 +1984,7 @@ export default function App() {
                         <h3 className="font-bold text-gray-900 text-sm mb-3">Membership Breakdown</h3>
                         <div className="space-y-2">
                           {[
-                            { name: "Monthly Pass (30 Days)", percent: "58%", color: "bg-[#102c22]" },
+                            { name: "30 Days Pass", percent: "58%", color: "bg-[#102c22]" },
                             { name: "Weekly Fit Pass", percent: "27%", color: "bg-[#22c55e]" },
                             { name: "Daily Pass", percent: "15%", color: "bg-[#f59e0b]" },
                           ].map((item) => (
@@ -2024,17 +2024,6 @@ export default function App() {
                         >
                           + Add Partner Gym
                         </button>
-                      </div>
-
-                      {/* Purpose Explanation Card */}
-                      <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-start gap-3 text-xs text-emerald-950">
-                        <Icon name="building" className="size-5 shrink-0 text-[#22c55e] mt-0.5" />
-                        <div>
-                          <p className="font-bold text-emerald-900">What is the Gyms Directory used for?</p>
-                          <p className="mt-0.5 text-emerald-800 leading-relaxed">
-                            The <b>Gyms Directory</b> represents the <b>physical fitness centers and brick-and-mortar facilities</b> partnered with FitMap (e.g. Iron Zone Fitness, Pulse Fitness Hub, Powerhouse Gym). Admins use this to inspect gym business permits, verify safety standards, manage map coordinates, assign affiliated coaches, and govern which facilities appear in the public search directory.
-                          </p>
-                        </div>
                       </div>
 
                       {/* Gyms Table */}
@@ -2130,17 +2119,6 @@ export default function App() {
                         </button>
                       </div>
 
-                      {/* Purpose Explanation Card */}
-                      <div className="p-4 rounded-2xl bg-purple-50 border border-purple-100 flex items-start gap-3 text-xs text-purple-950">
-                        <Icon name="card" className="size-5 shrink-0 text-purple-600 mt-0.5" />
-                        <div>
-                          <p className="font-bold text-purple-900">What are Membership Plans used for?</p>
-                          <p className="mt-0.5 text-purple-800 leading-relaxed">
-                            While the <b>Gyms Directory</b> tracks physical fitness facilities, <b>Membership Plans</b> represent the <b>commercial access passes and subscription products</b> that users purchase to enter gyms (e.g. Daily Pass, Weekly Fit, Monthly Pass, 3 Months Pass). Admins use this to standardize pricing guidelines, set revenue splits between FitMap and facility owners, monitor subscriber volume per duration, and activate or modify pass tiers.
-                          </p>
-                        </div>
-                      </div>
-
                       {/* Plans Grid with Stats */}
                       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {[
@@ -2163,7 +2141,7 @@ export default function App() {
                             popular: false,
                           },
                           {
-                            name: "Monthly Pass (30 Days)",
+                            name: "30 Days Pass",
                             duration: "30 Days",
                             basePrice: "₱2,200",
                             subscribers: "674 Users",
@@ -2475,7 +2453,7 @@ export default function App() {
               {[
                 { step: "01", title: "Find Gyms", desc: "Discover quality fitness centers near your area." },
                 { step: "02", title: "Choose Trainer", desc: "Compare specialties, rates, and verified reviews." },
-                { step: "03", title: "Book & Subscribe", desc: "Reserve a session or activate daily & monthly passes." },
+                { step: "03", title: "Book & Subscribe", desc: "Reserve a session or activate daily & 30-day passes." },
                 { step: "04", title: "Pay Online", desc: "Seamless instant booking confirmation." },
                 { step: "05", title: "Work Out", desc: "Show your digital pass and crush your goals." },
               ].map((item) => (
