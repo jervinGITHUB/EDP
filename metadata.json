@@ -1,0 +1,8 @@
+{
+  "name": "FitMap - Gym & Fitness Finder",
+  "description": "Discover nearby gyms, book trainer sessions, manage fitness memberships, and explore interactive fitness hubs.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

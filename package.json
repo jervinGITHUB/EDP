@@ -4,10 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "oxfmt"
+    "dev": "python3 app.py",
+    "build": "python3 -c \"import sqlite3, database; database.init_db(); print('SQLite Database and Python system verified successfully')\"",
+    "lint": "python3 -c \"import py_compile, glob; [py_compile.compile(f, doraise=True) for f in glob.glob('*.py')]\""
   },
   "dependencies": {
     "react": "^19.0.0",

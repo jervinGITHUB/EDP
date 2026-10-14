@@ -1,0 +1,5 @@
+# FitMap - Python & SQLite Requirements
+# FitMap is built to run immediately using Python's built-in standard library.
+# No external pip packages are mandatory to run app.py in PyCharm or any terminal!
+#
+# Minimum: Python 3.8+
