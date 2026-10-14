@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "python3 app.py",
-    "build": "python3 -c \"import sqlite3, database; database.init_db(); print('SQLite Database and Python system verified successfully')\"",
-    "lint": "python3 -c \"import py_compile, glob; [py_compile.compile(f, doraise=True) for f in glob.glob('*.py')]\""
+    "dev": "vite --host 0.0.0.0 --port 3000",
+    "build": "vite build",
+    "lint": "tsc",
+    "preview": "vite preview --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
     "react": "^19.0.0",

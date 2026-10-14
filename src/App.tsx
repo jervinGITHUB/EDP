@@ -1,563 +1,3032 @@
 import { useMemo, useState } from "react";
 
-type IconName = "search" | "pin" | "bell" | "chevron" | "star" | "clock" | "heart" | "route" | "calendar" | "users" | "dumbbell" | "check" | "menu";
+type Role = "Member" | "Trainer" | "Gym Owner" | "Admin";
+
+type UserProfile = {
+  id: number;
+  name: string;
+  email: string;
+  role: Role;
+  phone?: string;
+  specialty?: string;
+  gymName?: string;
+  avatarBg?: string;
+};
+
+type IconName =
+  | "search"
+  | "pin"
+  | "bell"
+  | "chevron"
+  | "star"
+  | "clock"
+  | "heart"
+  | "route"
+  | "calendar"
+  | "users"
+  | "dumbbell"
+  | "check"
+  | "menu"
+  | "grid"
+  | "card"
+  | "shield"
+  | "user"
+  | "logout"
+  | "building"
+  | "edit"
+  | "swap"
+  | "printer"
+  | "x";
 
 function Icon({ name, className = "size-5" }: { name: IconName; className?: string }) {
   const paths: Record<IconName, React.ReactNode> = {
-    search: <><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></>,
-    pin: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
-    bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" /><path d="M10 21h4" /></>,
+    search: (
+      <>
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-4-4" />
+      </>
+    ),
+    pin: (
+      <>
+        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </>
+    ),
+    bell: (
+      <>
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+        <path d="M10 21h4" />
+      </>
+    ),
     chevron: <path d="m9 18 6-6-6-6" />,
     star: <path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z" />,
-    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
-    heart: <path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 7l-1.1-1.2a5.5 5.5 0 0 0-7.7 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z" />,
-    route: <><circle cx="6" cy="19" r="2" /><circle cx="18" cy="5" r="2" /><path d="M8 19h2a3 3 0 0 0 3-3v-5a3 3 0 0 1 3-3h2" /></>,
-    calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></>,
-    users: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" /></>,
-    dumbbell: <><path d="m6 7 11 11M4 9l3-3M17 18l3-3M2 11l5-5M17 20l5-5" /></>,
+    clock: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </>
+    ),
+    heart: (
+      <path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 7l-1.1-1.2a5.5 5.5 0 0 0-7.7 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z" />
+    ),
+    route: (
+      <>
+        <circle cx="6" cy="19" r="2" />
+        <circle cx="18" cy="5" r="2" />
+        <path d="M8 19h2a3 3 0 0 0 3-3v-5a3 3 0 0 1 3-3h2" />
+      </>
+    ),
+    calendar: (
+      <>
+        <rect x="3" y="4" width="18" height="18" rx="2" />
+        <path d="M16 2v4M8 2v4M3 10h18" />
+      </>
+    ),
+    users: (
+      <>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" />
+      </>
+    ),
+    dumbbell: <path d="m6 7 11 11M4 9l3-3M17 18l3-3M2 11l5-5M17 20l5-5" />,
     check: <path d="m5 12 4 4L19 6" />,
-    menu: <><path d="M4 7h16" /><path d="M4 12h16" /><path d="M4 17h16" /></>,
+    menu: (
+      <>
+        <path d="M4 7h16" />
+        <path d="M4 12h16" />
+        <path d="M4 17h16" />
+      </>
+    ),
+    grid: (
+      <>
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      </>
+    ),
+    card: (
+      <>
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </>
+    ),
+    shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+    user: (
+      <>
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </>
+    ),
+    logout: (
+      <>
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
+      </>
+    ),
+    building: (
+      <>
+        <rect x="4" y="2" width="16" height="20" rx="2" />
+        <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01" />
+      </>
+    ),
+    edit: (
+      <>
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </>
+    ),
+    swap: (
+      <>
+        <path d="m16 3 4 4-4 4" />
+        <path d="M20 7H4" />
+        <path d="m8 21-4-4 4-4" />
+        <path d="M4 17h16" />
+      </>
+    ),
+    printer: (
+      <>
+        <polyline points="6 9 6 2 18 2 18 9" />
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+        <rect x="6" y="14" width="12" height="8" />
+      </>
+    ),
+    x: (
+      <>
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </>
+    ),
   };
-  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
-}
-
-const gyms = [
-  { id: 1, name: "Pulse Fitness Hub", area: "Bonifacio Global City", distance: 0.8, rating: 4.9, reviews: 214, price: 149, open: "Open until 11 PM", tag: "Top rated", image: "https://images.unsplash.com/photo-1637430308606-86576d8fef3c?auto=format&fit=crop&w=900&q=85", x: "62%", y: "31%" },
-  { id: 2, name: "The Foundry", area: "Makati City", distance: 1.4, rating: 4.8, reviews: 186, price: 179, open: "Open 24 hours", tag: "24/7 access", image: "https://images.unsplash.com/photo-1637666062717-1c6bcfa4a4df?auto=format&fit=crop&w=900&q=85", x: "35%", y: "57%" },
-  { id: 3, name: "Common Ground Athletics", area: "Ortigas Center", distance: 2.3, rating: 4.7, reviews: 98, price: 120, open: "Open until 10 PM", tag: "Best value", image: "https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&w=900&q=85", x: "73%", y: "67%" },
-];
-
-const filters = ["All gyms", "Under 1 km", "Open now", "Top rated"];
-
-const adminSections = ["Dashboard", "Applications", "Gyms", "Trainers", "Memberships", "Bookings", "Users", "Reports"] as const;
-type AdminSection = typeof adminSections[number];
-
-const adminData: Record<Exclude<AdminSection, "Dashboard" | "Reports">, { headers: string[]; rows: string[][] }> = {
-  Gyms: { headers: ["Gym", "Location", "Trainers", "Status"], rows: [["Pulse Fitness Hub", "BGC, Taguig", "6", "Active"], ["The Foundry", "Makati City", "8", "Active"], ["Common Ground Athletics", "Ortigas Center", "5", "Pending"]] },
-  Trainers: { headers: ["Trainer", "Specialty", "Gym", "Availability"], rows: [["Mika Reyes", "Strength training", "Pulse Fitness Hub", "Available"], ["David Cruz", "Boxing", "The Foundry", "In session"], ["Ana Lim", "Yoga & mobility", "Common Ground", "Available"]] },
-  Memberships: { headers: ["Plan", "Duration", "Price", "Subscribers"], rows: [["Day Pass", "1 day", "₱149", "184"], ["Weekly Fit", "7 days", "₱799", "426"], ["Unlimited", "30 days", "₱2,499", "674"]] },
-  Bookings: { headers: ["Customer", "Gym / Trainer", "Schedule", "Status"], rows: [["Alex Morgan", "Pulse Fitness Hub", "May 24 · 2:30 PM", "Confirmed"], ["Jamie Santos", "Mika Reyes", "May 24 · 4:00 PM", "Confirmed"], ["Chris Tan", "The Foundry", "May 25 · 9:00 AM", "Pending"]] },
-  Users: { headers: ["Customer", "Email", "Membership", "Status"], rows: [["Alex Morgan", "alex@example.com", "Day Pass", "Active"], ["Jamie Santos", "jamie@example.com", "Unlimited", "Active"], ["Chris Tan", "chris@example.com", "Weekly Fit", "Renewal due"]] },
-  Applications: { headers: ["Applicant", "Requested role", "Proof submitted", "Status"], rows: [] },
-};
-
-type RoleApplication = { id: number; applicant: string; role: "Trainer" | "Gym Owner"; proof: string; status: "Pending" | "Approved" | "Declined" };
-
-function AdminDashboard({ onExit, applications, onUpdateApplication }: { onExit: () => void; applications: RoleApplication[]; onUpdateApplication: (id: number, status: "Approved" | "Declined") => void }) {
-  const [section, setSection] = useState<AdminSection>("Dashboard");
-  const [message, setMessage] = useState("");
-  const action = (text: string) => {
-    setMessage(text);
-    window.setTimeout(() => setMessage(""), 2400);
-  };
-
   return (
-    <main className="min-h-screen bg-[#eef1eb] text-[#14231d] lg:grid lg:grid-cols-[250px_1fr]">
-      <aside className="border-b border-black/5 bg-[#153c2e] p-4 text-white lg:fixed lg:inset-y-0 lg:w-[250px] lg:border-b-0 lg:p-6">
-        <div className="flex items-center justify-between lg:block">
-          <div className="flex items-center gap-2.5"><div className="grid size-10 place-items-center rounded-xl bg-[#dff86a] text-[#153c2e]"><Icon name="dumbbell" /></div><div><p className="font-bold">FitMap</p><p className="text-xs text-white/55">Administrator</p></div></div>
-          <button onClick={onExit} className="rounded-xl border border-white/15 px-3 py-2 text-xs font-semibold lg:hidden">User app</button>
-        </div>
-        <nav className="mt-5 flex gap-2 overflow-x-auto lg:mt-10 lg:block lg:space-y-1">
-          {adminSections.map((item) => <button key={item} onClick={() => setSection(item)} className={`flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition lg:w-full ${section === item ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>{item}</button>)}
-        </nav>
-        <button onClick={onExit} className="absolute bottom-6 left-6 right-6 hidden rounded-xl border border-white/15 py-3 text-sm font-semibold text-white/75 hover:bg-white/10 lg:block">Back to user app</button>
-      </aside>
-
-      <section className="min-w-0 p-5 sm:p-8 lg:col-start-2 lg:p-10">
-        <header className="mb-8 flex items-center justify-between gap-4">
-          <div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Admin console</p><h1 className="mt-1 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{section === "Applications" ? "Role applications" : section === "Gyms" ? "Gym management" : section === "Trainers" ? "Trainer management" : section === "Memberships" ? "Membership management" : section === "Bookings" ? "Booking management" : section === "Users" ? "User management" : section === "Reports" ? "Reports & analytics" : "Dashboard"}</h1></div>
-          <button onClick={() => action("No new critical alerts.")} className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white shadow-sm"><Icon name="bell" className="size-5" /><span className="absolute right-2 top-2 size-2 rounded-full bg-[#f27c54]" /></button>
-        </header>
-
-        {section === "Dashboard" && <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {[["₱684,320", "Monthly revenue", "+12.4%"], ["1,284", "Active members", "+8.2%"], ["342", "Total bookings", "+18.7%"], ["19", "Partner gyms", "+2 this month"]].map(([value, label, change]) => <article key={label} className="rounded-3xl bg-white p-5 shadow-sm"><p className="text-sm text-[#718078]">{label}</p><p className="mt-3 text-3xl font-bold tracking-[-0.04em]">{value}</p><p className="mt-3 text-xs font-semibold text-[#4c8069]">{change}</p></article>)}
-          </div>
-          <div className="mt-5 grid gap-5 xl:grid-cols-[1.5fr_1fr]">
-            <article className="rounded-3xl bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><h2 className="text-lg font-semibold">Booking activity</h2><p className="mt-1 text-xs text-[#718078]">Last 7 days</p></div><button onClick={() => setSection("Reports")} className="text-xs font-semibold text-[#3f705b]">View report</button></div><div className="mt-8 flex h-48 items-end gap-3">{[48, 62, 43, 78, 66, 92, 76].map((height, i) => <div key={i} className="flex flex-1 flex-col items-center gap-2"><div style={{ height: `${height}%` }} className="w-full max-w-10 rounded-t-lg bg-[#dff86a]" /><span className="text-[10px] text-[#819088]">{["M", "T", "W", "T", "F", "S", "S"][i]}</span></div>)}</div></article>
-            <article className="rounded-3xl bg-[#153c2e] p-6 text-white shadow-sm"><h2 className="text-lg font-semibold">System health</h2><div className="mt-6 space-y-5">{[["Database", "Operational"], ["Booking service", "Operational"], ["Location API", "Operational"], ["Notifications", "Operational"]].map(([name, status]) => <div key={name} className="flex items-center justify-between"><span className="text-sm text-white/65">{name}</span><span className="flex items-center gap-2 text-xs font-semibold"><span className="size-2 rounded-full bg-[#dff86a]" />{status}</span></div>)}</div></article>
-          </div>
-          <article className="mt-5 rounded-3xl bg-white p-6 shadow-sm"><div className="mb-4 flex items-center justify-between"><h2 className="text-lg font-semibold">Recent bookings</h2><button onClick={() => setSection("Bookings")} className="text-xs font-semibold text-[#3f705b]">Manage all</button></div><div className="space-y-1">{adminData.Bookings.rows.map((row) => <div key={row[0]} className="grid grid-cols-[1fr_auto] items-center gap-4 rounded-xl px-3 py-3 hover:bg-[#f4f6f1]"><div><p className="text-sm font-semibold">{row[0]}</p><p className="mt-0.5 text-xs text-[#718078]">{row[1]} · {row[2]}</p></div><span className="rounded-full bg-[#edf3d1] px-3 py-1 text-xs font-semibold">{row[3]}</span></div>)}</div></article>
-        </>}
-
-        {section !== "Dashboard" && section !== "Reports" && <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
-          <div className="flex flex-col gap-3 border-b border-black/5 p-5 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex h-11 max-w-sm flex-1 items-center gap-2 rounded-xl bg-[#f1f3ef] px-3"><Icon name="search" className="size-4 text-[#718078]" /><input className="min-w-0 flex-1 bg-transparent text-sm outline-none" placeholder={`Search ${section.toLowerCase()}...`} /></label>
-            {section !== "Applications" ? <button onClick={() => action(`New ${section.slice(0, -1).toLowerCase()} form opened.`)} className="rounded-xl bg-[#153c2e] px-4 py-3 text-sm font-semibold text-white">Add new {section.slice(0, -1).toLowerCase()}</button> : <span className="rounded-full bg-[#fff1cb] px-3 py-2 text-xs font-semibold text-[#7a5a14]">{applications.filter((item) => item.status === "Pending").length} awaiting review</span>}
-          </div>
-          {section !== "Applications" && <div className="overflow-x-auto"><table className="w-full min-w-[650px] border-collapse text-left"><thead><tr>{adminData[section].headers.map((header) => <th key={header} className="border-b border-black/5 px-5 py-4 text-xs font-semibold uppercase tracking-wider text-[#718078]">{header}</th>)}<th className="border-b border-black/5 px-5 py-4" /></tr></thead><tbody>{adminData[section].rows.map((row) => <tr key={row[0]} className="hover:bg-[#f8f9f6]">{row.map((cell, i) => <td key={cell} className={`border-b border-black/5 px-5 py-4 text-sm ${i === 0 ? "font-semibold" : "text-[#637169]"}`}>{cell}</td>)}<td className="border-b border-black/5 px-5 py-4 text-right"><button onClick={() => action(`${row[0]} is ready to edit.`)} className="rounded-lg border border-black/10 px-3 py-2 text-xs font-semibold">Manage</button></td></tr>)}</tbody></table></div>}
-          {section === "Applications" && <div className="p-5">
-            {applications.length === 0 ? <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center"><p className="font-semibold">No role applications yet</p><p className="mt-2 text-sm text-[#718078]">Trainer and Gym Owner requests will appear here after submission.</p></div> : <div className="space-y-3">{applications.map((item) => <article key={item.id} className="rounded-2xl border border-black/5 p-4"><div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><div className="flex items-center gap-2"><h3 className="font-semibold">{item.applicant}</h3><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase ${item.status === "Approved" ? "bg-[#e7f1b2] text-[#345442]" : item.status === "Declined" ? "bg-[#ffe2dc] text-[#8b3f31]" : "bg-[#fff1cb] text-[#7a5a14]"}`}>{item.status}</span></div><p className="mt-1 text-sm text-[#637169]">Requests <b>{item.role}</b> access · {item.proof}</p></div><div className="flex gap-2">{item.status === "Pending" ? <><button onClick={() => { onUpdateApplication(item.id, "Declined"); action(`${item.applicant}'s request was declined.`); }} className="rounded-xl border border-[#d66d58]/30 px-4 py-2.5 text-xs font-semibold text-[#9c4938]">Decline</button><button onClick={() => { onUpdateApplication(item.id, "Approved"); action(`${item.applicant} is now an approved ${item.role}.`); }} className="rounded-xl bg-[#153c2e] px-4 py-2.5 text-xs font-semibold text-white">Approve</button></> : <button onClick={() => action(`${item.applicant}'s submitted proofs opened.`)} className="rounded-xl border border-black/10 px-4 py-2.5 text-xs font-semibold">View proofs</button>}</div></div></article>)}</div>}
-          </div>}
-        </div>}
-
-        {section === "Reports" && <div className="grid gap-5 xl:grid-cols-[1.4fr_1fr]"><article className="rounded-3xl bg-white p-6 shadow-sm"><h2 className="text-lg font-semibold">Revenue by membership</h2><div className="mt-8 space-y-5">{[["Monthly", "58%", "bg-[#153c2e]"], ["Weekly", "27%", "bg-[#78a48d]"], ["Daily", "15%", "bg-[#dff86a]"]].map(([name, value, color]) => <div key={name}><div className="mb-2 flex justify-between text-sm"><span>{name}</span><b>{value}</b></div><div className="h-3 overflow-hidden rounded-full bg-[#edf0ea]"><div style={{ width: value }} className={`h-full rounded-full ${color}`} /></div></div>)}</div></article><article className="rounded-3xl bg-white p-6 shadow-sm"><h2 className="text-lg font-semibold">Generate report</h2><p className="mt-2 text-sm leading-6 text-[#718078]">Export current platform data for management review.</p><div className="mt-5 space-y-2">{["Membership summary", "Booking performance", "Customer analytics", "Trainer schedules"].map((report) => <button onClick={() => action(`${report} PDF generated.`)} key={report} className="flex w-full items-center justify-between rounded-xl border border-black/5 p-3 text-left text-sm font-semibold hover:bg-[#f4f6f1]">{report}<span>Download</span></button>)}</div></article></div>}
-      </section>
-      {message && <div role="status" className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-full bg-[#14231d] px-5 py-3 text-sm font-semibold text-white shadow-xl">{message}</div>}
-    </main>
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {paths[name]}
+    </svg>
   );
 }
 
+// Initial Mock Datasets
+const defaultGyms = [
+  {
+    id: 1,
+    name: "Iron Zone Fitness",
+    area: "San Jose, Nueva Ecija",
+    distance: 0.6,
+    rating: 4.8,
+    reviews: 142,
+    price: 150,
+    open: "Open until 10 PM",
+    tag: "Verified Gym",
+    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=85",
+    x: "58%",
+    y: "43%",
+    address: "Maharlika Highway, San Jose City, Nueva Ecija",
+    phone: "0917 123 4567",
+    facilities: ["Cardio Zone", "Heavy Weights", "Crossfit Rig", "Showers", "Locker Room", "Parking"],
+  },
+  {
+    id: 2,
+    name: "Pulse Fitness Hub",
+    area: "Bonifacio Global City",
+    distance: 0.8,
+    rating: 4.9,
+    reviews: 214,
+    price: 149,
+    open: "Open until 11 PM",
+    tag: "Top Rated",
+    image: "https://images.unsplash.com/photo-1637430308606-86576d8fef3c?auto=format&fit=crop&w=900&q=85",
+    x: "62%",
+    y: "31%",
+    address: "32nd Street corner 9th Ave, Bonifacio Global City, Taguig",
+    phone: "0918 555 1234",
+    facilities: ["Sauna", "Cardio Deck", "Strength Machines", "Smoothie Bar", "Lockers"],
+  },
+  {
+    id: 3,
+    name: "Powerhouse Gym",
+    area: "Cabanatuan City",
+    distance: 1.4,
+    rating: 4.7,
+    reviews: 186,
+    price: 160,
+    open: "Open 24 hours",
+    tag: "24/7 Access",
+    image: "https://images.unsplash.com/photo-1637666062717-1c6bcfa4a4df?auto=format&fit=crop&w=900&q=85",
+    x: "35%",
+    y: "57%",
+    address: "Burgos Ave, Cabanatuan City, Nueva Ecija",
+    phone: "0920 333 7890",
+    facilities: ["Olympic Racks", "Dumbbells up to 120lbs", "Boxing Ring", "Functional Turf"],
+  },
+  {
+    id: 4,
+    name: "Common Ground Athletics",
+    area: "Ortigas Center",
+    distance: 2.3,
+    rating: 4.7,
+    reviews: 98,
+    price: 120,
+    open: "Open until 10 PM",
+    tag: "Best Value",
+    image: "https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&w=900&q=85",
+    x: "73%",
+    y: "67%",
+    address: "Emerald Avenue, Ortigas Center, Pasig",
+    phone: "0915 888 2211",
+    facilities: ["Yoga Studio", "Calisthenics Area", "Lockers", "Shower Area"],
+  },
+];
+
+const defaultTrainers = [
+  {
+    id: 1,
+    name: "Coach Michael Reyes",
+    specialty: "Strength & Conditioning",
+    gymName: "Iron Zone Fitness",
+    rating: 4.9,
+    reviews: 128,
+    experience: "8 years",
+    hourlyRate: 600,
+    image: "https://images.unsplash.com/photo-1758875568932-0eefd3e60090?auto=format&fit=crop&w=700&q=85",
+    availableSlots: ["Tomorrow · 9:30 AM", "Tomorrow · 2:00 PM", "May 27 · 10:00 AM"],
+  },
+  {
+    id: 2,
+    name: "Coach David Cruz",
+    specialty: "Bodybuilding & Hypertrophy",
+    gymName: "Powerhouse Gym",
+    rating: 4.8,
+    reviews: 95,
+    experience: "6 years",
+    hourlyRate: 550,
+    image: "https://images.unsplash.com/photo-1585892478508-130c50eb7a69?auto=format&fit=crop&w=700&q=85",
+    availableSlots: ["Today · 4:00 PM", "May 28 · 1:00 PM", "May 29 · 5:30 PM"],
+  },
+  {
+    id: 3,
+    name: "Coach Mika Reyes",
+    specialty: "Functional Movement & Mobility",
+    gymName: "Pulse Fitness Hub",
+    rating: 4.9,
+    reviews: 110,
+    experience: "7 years",
+    hourlyRate: 650,
+    image: "https://images.unsplash.com/photo-1738523686578-f18348c8292b?auto=format&fit=crop&w=700&q=85",
+    availableSlots: ["Tomorrow · 8:00 AM", "May 27 · 3:30 PM", "May 30 · 11:00 AM"],
+  },
+  {
+    id: 4,
+    name: "Coach Luis Mendoza",
+    specialty: "Boxing & High-Intensity Conditioning",
+    gymName: "Common Ground Athletics",
+    rating: 4.7,
+    reviews: 74,
+    experience: "5 years",
+    hourlyRate: 500,
+    image: "https://images.unsplash.com/photo-1708011108842-30966718105a?auto=format&fit=crop&w=700&q=85",
+    availableSlots: ["Today · 6:00 PM", "Tomorrow · 10:30 AM", "May 29 · 4:00 PM"],
+  },
+];
+
+const demoUsers: Record<Role, UserProfile> = {
+  Member: {
+    id: 7,
+    name: "John Dela Cruz",
+    email: "john@example.com",
+    role: "Member",
+    phone: "0919 555 6666",
+    avatarBg: "bg-[#22c55e]",
+  },
+  Trainer: {
+    id: 1,
+    name: "Coach Michael Reyes",
+    email: "michael@fitmap.com",
+    role: "Trainer",
+    specialty: "Strength & Conditioning",
+    gymName: "Iron Zone Fitness",
+    phone: "0917 888 9999",
+    avatarBg: "bg-[#22c55e]",
+  },
+  "Gym Owner": {
+    id: 2,
+    name: "Carlos Mendoza",
+    email: "carlos@ironzone.com",
+    role: "Gym Owner",
+    gymName: "Iron Zone Fitness",
+    phone: "0917 123 4567",
+    avatarBg: "bg-[#22c55e]",
+  },
+  Admin: {
+    id: 99,
+    name: "System Administrator",
+    email: "admin@fitmap.com",
+    role: "Admin",
+    phone: "0918 000 1111",
+    avatarBg: "bg-[#22c55e]",
+  },
+};
+
+type RoleApplication = {
+  id: number;
+  applicant: string;
+  role: "Trainer" | "Gym Owner";
+  proof: string;
+  specialtyOrGym: string;
+  status: "Pending" | "Approved" | "Declined";
+  date: string;
+};
+
+type BookingItem = {
+  id: number;
+  customerName: string;
+  gymName: string;
+  trainerName: string;
+  sessionType: string;
+  date: string;
+  time: string;
+  status: "Confirmed" | "Pending" | "Cancelled";
+  price: number;
+};
+
 export default function App() {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("All gyms");
-  const [selected, setSelected] = useState(1);
-  const [saved, setSaved] = useState<number[]>([]);
-  const [booking, setBooking] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
-  const [signedIn, setSignedIn] = useState(false);
-  const [reportsOpen, setReportsOpen] = useState(false);
-  const [panel, setPanel] = useState<"bookings" | "memberships" | "notifications" | "profile" | null>(null);
-  const [toast, setToast] = useState("");
+  // Authentication & Profile State
+  const [signedIn, setSignedIn] = useState(true);
+  const [currentUser, setCurrentUser] = useState<UserProfile>(demoUsers.Member);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<"login" | "register">("login");
+  const [loginEmail, setLoginEmail] = useState("john@example.com");
+  const [loginPassword, setLoginPassword] = useState("password123");
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regRole, setRegRole] = useState<Role>("Member");
+  const [regDetail, setRegDetail] = useState("");
+  const [forgotModalOpen, setForgotModalOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+
+  // Navigation: The sidebar sets this and DOES NOT SCROLL the page!
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [sidebarOpenMobile, setSidebarOpenMobile] = useState(false);
+
+  // App Data State
+  const [gymsList, setGymsList] = useState(defaultGyms);
+  const [trainersList] = useState(defaultTrainers);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("All gyms");
   const [sortBy, setSortBy] = useState<"Recommended" | "Nearest first">("Recommended");
-  const [adminMode, setAdminMode] = useState(false);
-  const [applicationOpen, setApplicationOpen] = useState(false);
-  const [applicationRole, setApplicationRole] = useState<"Trainer" | "Gym Owner">("Trainer");
-  const [applicationSent, setApplicationSent] = useState(false);
-  const [sidebarHidden, setSidebarHidden] = useState(false);
-  const [roleApplications, setRoleApplications] = useState<RoleApplication[]>([]);
-  const [activeNav, setActiveNav] = useState("home");
-  const [gymDetails, setGymDetails] = useState<number | null>(null);
-  const [locationEditorOpen, setLocationEditorOpen] = useState(false);
-  const [ownerGymLocation, setOwnerGymLocation] = useState({ x: 58, y: 43, address: "32nd Street, Bonifacio Global City, Taguig" });
-  const [roleDashboardOpen, setRoleDashboardOpen] = useState(false);
-  const [trainerDetails, setTrainerDetails] = useState<string | null>(null);
-  const [trainerRequests, setTrainerRequests] = useState([
-    { id: 1, client: "Nicole Garcia", session: "Strength assessment", schedule: "May 28 · 10:00 AM", status: "Pending" },
-    { id: 2, client: "Paolo Reyes", session: "Personal training", schedule: "May 29 · 3:30 PM", status: "Pending" },
+  const [savedGyms, setSavedGyms] = useState<number[]>([1]);
+
+  // Bookings State
+  const [bookings, setBookings] = useState<BookingItem[]>([
+    {
+      id: 101,
+      customerName: "John Dela Cruz",
+      gymName: "Iron Zone Fitness",
+      trainerName: "Coach Michael Reyes",
+      sessionType: "Strength Assessment",
+      date: "Tomorrow",
+      time: "9:30 AM",
+      status: "Confirmed",
+      price: 600,
+    },
+    {
+      id: 102,
+      customerName: "John Dela Cruz",
+      gymName: "Pulse Fitness Hub",
+      trainerName: "Facility Access",
+      sessionType: "Day Pass",
+      date: "May 28",
+      time: "2:30 PM",
+      status: "Confirmed",
+      price: 149,
+    },
+    {
+      id: 103,
+      customerName: "John Dela Cruz",
+      gymName: "Powerhouse Gym",
+      trainerName: "Coach David Cruz",
+      sessionType: "Bodybuilding Session",
+      date: "May 30",
+      time: "4:00 PM",
+      status: "Pending",
+      price: 550,
+    },
   ]);
-  const [membershipCheckout, setMembershipCheckout] = useState<{ gym: string; plan: string; price: string } | null>(null);
-  const [activeMembership, setActiveMembership] = useState<{ gym: string; plan: string; price: string } | null>(null);
 
-  const notify = (message: string) => {
-    setToast(message);
-    window.setTimeout(() => setToast(""), 2600);
+  // Memberships State
+  const [userMembership, setUserMembership] = useState<{
+    planName: string;
+    gymName: string;
+    validUntil: string;
+    price: string;
+    status: "Active" | "Expired";
+  }>({
+    planName: "Monthly Pass (Unlimited)",
+    gymName: "Iron Zone Fitness",
+    validUntil: "June 24, 2026",
+    price: "₱2,200",
+    status: "Active",
+  });
+
+  // Role Applications State (for Admin review and Member apply)
+  const [roleApplications, setRoleApplications] = useState<RoleApplication[]>([
+    {
+      id: 1,
+      applicant: "Bea Cruz",
+      role: "Trainer",
+      specialtyOrGym: "HIIT & Rehab Coach",
+      proof: "PRC License #882194 + NASM Certificate",
+      status: "Pending",
+      date: "May 23, 2026",
+    },
+    {
+      id: 2,
+      applicant: "Carlos Mendoza",
+      role: "Gym Owner",
+      specialtyOrGym: "Iron Zone Fitness",
+      proof: "DTI Registration #0492190 & City Mayor Permit",
+      status: "Approved",
+      date: "May 20, 2026",
+    },
+  ]);
+
+  // Trainer Schedule Slots (Interactive toggle)
+  const [trainerSchedule, setTrainerSchedule] = useState([
+    { id: 1, day: "Monday", time: "08:00 AM - 10:00 AM", isBooked: true },
+    { id: 2, day: "Monday", time: "10:00 AM - 12:00 PM", isBooked: false },
+    { id: 3, day: "Monday", time: "02:00 PM - 04:00 PM", isBooked: false },
+    { id: 4, day: "Tuesday", time: "09:00 AM - 11:00 AM", isBooked: true },
+    { id: 5, day: "Tuesday", time: "01:00 PM - 03:00 PM", isBooked: false },
+    { id: 6, day: "Wednesday", time: "08:00 AM - 10:00 AM", isBooked: false },
+    { id: 7, day: "Wednesday", time: "04:00 PM - 06:00 PM", isBooked: true },
+    { id: 8, day: "Thursday", time: "10:00 AM - 12:00 PM", isBooked: false },
+    { id: 9, day: "Friday", time: "09:00 AM - 11:00 AM", isBooked: false },
+    { id: 10, day: "Saturday", time: "08:00 AM - 10:00 AM", isBooked: true },
+  ]);
+
+  // Trainer Incoming Requests
+  const [trainerRequests, setTrainerRequests] = useState([
+    { id: 1, client: "Nicole Garcia", session: "Strength Assessment", schedule: "Tomorrow · 10:00 AM", status: "Pending" },
+    { id: 2, client: "Paolo Reyes", session: "Personal Training", schedule: "May 29 · 3:30 PM", status: "Pending" },
+  ]);
+
+  // Gym Owner Profile Form
+  const [gymProfile, setGymProfile] = useState({
+    name: "Iron Zone Fitness",
+    address: "Maharlika Highway, San Jose City, Nueva Ecija",
+    phone: "0917 123 4567",
+    hours: "Mon - Sun: 6:00 AM - 10:00 PM",
+    description: "Modern fitness space with heavy weights, crossfit turf, certified coaches, and clean lockers.",
+    pinX: 58,
+    pinY: 43,
+  });
+
+  // Modal Controls
+  const [selectedGymForModal, setSelectedGymForModal] = useState<number | null>(null);
+  const [bookingModalTrainer, setBookingModalTrainer] = useState<number | null>(null);
+  const [bookingModalGym, setBookingModalGym] = useState<number>(1);
+  const [bookingDateInput, setBookingDateInput] = useState("2026-05-25");
+  const [bookingTimeInput, setBookingTimeInput] = useState("09:30 AM");
+  const [bookingTypeInput, setBookingTypeInput] = useState("Personal Training");
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [subscribeModalGym, setSubscribeModalGym] = useState<string | null>(null);
+
+  // Notifications
+  const [toastMessage, setToastMessage] = useState("");
+  const notify = (msg: string) => {
+    setToastMessage(msg);
+    window.setTimeout(() => setToastMessage(""), 2800);
   };
-  const enterRolePreview = (role: "Member" | "Trainer" | "Gym Owner" | "Admin") => {
-    setAuthOpen(false);
+
+  // Switch active POV / Role cleanly
+  const switchRole = (role: Role) => {
+    setCurrentUser(demoUsers[role]);
     setSignedIn(true);
-    setPanel(null);
-    if (role === "Admin") {
-      setAdminMode(true);
-      return;
-    }
-    setAdminMode(false);
-    if (role === "Member") {
-      setRoleApplications([]);
-      setApplicationSent(false);
-      notify("Member preview loaded.");
-      return;
-    }
-    setApplicationRole(role);
-    setApplicationSent(true);
-    setRoleApplications([{ id: Date.now(), applicant: "Alex Morgan", role, proof: "Preview credentials", status: "Approved" }]);
-    setRoleDashboardOpen(true);
-    notify(`${role} preview loaded.`);
+    setActiveTab("dashboard");
+    notify(`Switched to ${role} POV (${demoUsers[role].name})`);
   };
 
-  const visible = useMemo(() => gyms.filter((gym) => {
-    const matches = `${gym.name} ${gym.area}`.toLowerCase().includes(query.toLowerCase());
-    if (filter === "Under 1 km") return matches && gym.distance < 1;
-    if (filter === "Top rated") return matches && gym.rating >= 4.8;
-    return matches;
-  }), [query, filter]);
-  const approvedProfessionalRole = roleApplications[roleApplications.length - 1]?.status === "Approved" ? applicationRole : null;
+  // Login handler
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Match demo accounts or create dynamic profile
+    let targetRole: Role = "Member";
+    let targetName = "John Dela Cruz";
+    if (loginEmail.toLowerCase().includes("trainer") || loginEmail.toLowerCase().includes("michael")) {
+      targetRole = "Trainer";
+      targetName = "Coach Michael Reyes";
+    } else if (loginEmail.toLowerCase().includes("owner") || loginEmail.toLowerCase().includes("carlos")) {
+      targetRole = "Gym Owner";
+      targetName = "Carlos Mendoza";
+    } else if (loginEmail.toLowerCase().includes("admin")) {
+      targetRole = "Admin";
+      targetName = "System Administrator";
+    } else {
+      targetName = loginEmail.split("@")[0] || "FitMap User";
+    }
 
-  if (adminMode) return <AdminDashboard onExit={() => setAdminMode(false)} applications={roleApplications} onUpdateApplication={(id, status) => setRoleApplications((items) => items.map((item) => item.id === id ? { ...item, status } : item))} />;
+    setCurrentUser({
+      id: Date.now(),
+      name: targetName,
+      email: loginEmail,
+      role: targetRole,
+      phone: "0917 555 7777",
+      avatarBg: "bg-[#22c55e]",
+    });
+    setSignedIn(true);
+    setAuthModalOpen(false);
+    setActiveTab("dashboard");
+    notify(`Welcome back, ${targetName}! Signed in as ${targetRole}.`);
+  };
+
+  // Register handler
+  const handleRegisterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!regName.trim() || !regEmail.trim()) {
+      notify("Please fill in your name and email.");
+      return;
+    }
+    const newUser: UserProfile = {
+      id: Date.now(),
+      name: regName.trim(),
+      email: regEmail.trim(),
+      role: regRole,
+      phone: "0919 000 0000",
+      specialty: regRole === "Trainer" ? regDetail || "Strength Coach" : undefined,
+      gymName: regRole === "Gym Owner" ? regDetail || "Partner Gym" : undefined,
+      avatarBg: "bg-[#22c55e]",
+    };
+
+    setCurrentUser(newUser);
+    setSignedIn(true);
+    setAuthModalOpen(false);
+    setActiveTab("dashboard");
+    notify(`Account created successfully! Welcome to FitMap, ${regName}.`);
+  };
+
+  // Filtered Gyms for Discovery & Find Gyms
+  const visibleGyms = useMemo(() => {
+    return gymsList.filter((gym) => {
+      const q = searchQuery.toLowerCase();
+      const matchesQuery =
+        !q ||
+        gym.name.toLowerCase().includes(q) ||
+        gym.area.toLowerCase().includes(q) ||
+        gym.facilities.some((f) => f.toLowerCase().includes(q));
+
+      if (!matchesQuery) return false;
+      if (selectedFilter === "Under 1 km") return gym.distance < 1.0;
+      if (selectedFilter === "Top rated") return gym.rating >= 4.8;
+      if (selectedFilter === "Open now") return gym.open.includes("24") || gym.open.includes("11");
+      return true;
+    });
+  }, [gymsList, searchQuery, selectedFilter]);
+
+  // Sidebar navigation configuration depending on active role
+  const getSidebarNavItems = () => {
+    if (currentUser.role === "Member") {
+      return [
+        { id: "dashboard", label: "Dashboard", icon: "grid" as IconName },
+        { id: "bookings", label: "My Bookings", icon: "calendar" as IconName },
+        { id: "memberships", label: "My Memberships", icon: "card" as IconName },
+        { id: "trainers", label: "Find Trainers", icon: "users" as IconName },
+        { id: "partner", label: "Apply as Partner", icon: "check" as IconName },
+        { id: "gyms", label: "Find Gyms", icon: "dumbbell" as IconName },
+      ];
+    }
+    if (currentUser.role === "Trainer") {
+      return [
+        { id: "dashboard", label: "Dashboard", icon: "grid" as IconName },
+        { id: "requests", label: "Client Requests", icon: "bell" as IconName },
+        { id: "schedule", label: "My Schedule", icon: "calendar" as IconName },
+        { id: "clients", label: "My Clients", icon: "users" as IconName },
+        { id: "gyms", label: "Partner Gyms", icon: "dumbbell" as IconName },
+      ];
+    }
+    if (currentUser.role === "Gym Owner") {
+      return [
+        { id: "dashboard", label: "Dashboard", icon: "grid" as IconName },
+        { id: "gym-profile", label: "Gym Profile & Edit", icon: "edit" as IconName },
+        { id: "subscribers", label: "Subscribers", icon: "card" as IconName },
+        { id: "trainers", label: "Trainer Roster", icon: "users" as IconName },
+        { id: "location", label: "Map Location Pin", icon: "pin" as IconName },
+        { id: "reservations", label: "Reservations", icon: "calendar" as IconName },
+      ];
+    }
+    // Admin Role
+    return [
+      { id: "dashboard", label: "Dashboard", icon: "grid" as IconName },
+      { id: "applications", label: "Partner Applications", icon: "shield" as IconName },
+      { id: "gyms-admin", label: "Gyms Directory", icon: "building" as IconName },
+      { id: "trainers-admin", label: "Trainers Directory", icon: "users" as IconName },
+      { id: "memberships-admin", label: "Membership Plans", icon: "card" as IconName },
+      { id: "bookings-admin", label: "All Bookings", icon: "calendar" as IconName },
+      { id: "reports", label: "Management Reports", icon: "printer" as IconName },
+    ];
+  };
 
   return (
-    <main className={`min-h-screen bg-[#f7f8f4] text-[#14231d] transition-[padding] duration-300 ${!signedIn || sidebarHidden ? "lg:pl-0" : "lg:pl-[248px]"}`}>
-      {signedIn && <aside className={`fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col bg-[#102c22] p-6 text-white transition-transform duration-300 lg:flex ${sidebarHidden ? "-translate-x-full" : "translate-x-0"}`}>
-        <div className="flex items-center gap-2.5">
-          <div className="grid size-10 place-items-center rounded-xl bg-[#dff86a] text-[#153c2e]"><Icon name="dumbbell" /></div>
-          <div><p className="text-xl font-bold tracking-[-0.04em]">FitMap</p><p className="text-[10px] uppercase tracking-wider text-white/45">{approvedProfessionalRole ? `${approvedProfessionalRole} account` : "Member portal"}</p></div>
-        </div>
-        <nav className="mt-10 space-y-1">
-          <button onClick={() => { setActiveNav("home"); window.scrollTo({ top: 0, behavior: "smooth" }); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "home" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>Home</button>
-          {approvedProfessionalRole && <button onClick={() => { setActiveNav("workspace"); setRoleDashboardOpen(true); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "workspace" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>{approvedProfessionalRole === "Trainer" ? "Trainer workspace" : "Gym Owner workspace"}</button>}
-          <button onClick={() => { setActiveNav("gyms"); document.getElementById("gyms")?.scrollIntoView({ behavior: "smooth" }); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "gyms" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>Find gyms</button>
-          <button onClick={() => { setActiveNav("trainers"); document.getElementById("trainers")?.scrollIntoView({ behavior: "smooth" }); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "trainers" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>Trainers</button>
-          <button onClick={() => { setActiveNav("memberships"); setPanel("memberships"); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "memberships" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>Memberships</button>
-          <button onClick={() => { setActiveNav("bookings"); signedIn ? setPanel("bookings") : setAuthOpen(true); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "bookings" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>My bookings</button>
-          <button onClick={() => { setActiveNav("about"); document.getElementById("about")?.scrollIntoView({ behavior: "smooth" }); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "about" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>About FitMap</button>
-          <button onClick={() => { setActiveNav("reports"); setReportsOpen(true); }} className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "reports" ? "bg-[#dff86a] text-[#153c2e]" : "text-white/65 hover:bg-white/10 hover:text-white"}`}>Reports</button>
-        </nav>
-        <div className="mt-auto space-y-2 border-t border-white/10 pt-5">
-          <button onClick={() => { setActiveNav("partner"); signedIn ? setApplicationOpen(true) : setAuthOpen(true); }} className={`w-full rounded-xl border px-4 py-3 text-left text-sm font-semibold transition ${activeNav === "partner" ? "border-[#dff86a] bg-[#dff86a] text-[#153c2e]" : "border-white/15 text-white/80 hover:bg-white/10"}`}>Become a partner</button>
-          <button onClick={() => setAdminMode(true)} className="w-full rounded-xl bg-white/10 px-4 py-3 text-left text-sm font-semibold text-white">Administrator portal</button>
-        </div>
-      </aside>}
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-[#f7f8f4]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-[1500px] items-center gap-8 px-5 lg:px-10">
-          <div className={`items-center gap-2.5 ${signedIn ? "flex lg:hidden" : "flex"}`}>
-            <div className="grid size-10 place-items-center rounded-xl bg-[#153c2e] text-[#dff86a]"><Icon name="dumbbell" /></div>
-            <span className="text-xl font-bold tracking-[-0.04em]">FitMap</span>
-          </div>
-          {signedIn && <button onClick={() => setSidebarHidden((value) => !value)} aria-label={sidebarHidden ? "Show sidebar" : "Hide sidebar"} className="hidden size-10 place-items-center rounded-xl border border-black/10 bg-white shadow-sm hover:bg-[#eef1eb] lg:grid">
-            <Icon name="menu" className="size-5" />
-          </button>}
-          {signedIn ? <div className="hidden items-center gap-3 lg:flex"><p className="text-sm text-[#68766f]">{approvedProfessionalRole === "Trainer" ? "Manage bookings, clients, schedules, and ratings." : approvedProfessionalRole === "Gym Owner" ? "Manage your gym, memberships, trainers, and customers." : "Discover gyms, trainers, and memberships near you."}</p><span className="rounded-full bg-[#fff1cb] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#7a5a14]">Preview data</span></div> : <nav className="ml-auto hidden items-center gap-7 text-sm font-medium lg:flex"><button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Home</button><button onClick={() => document.getElementById("gyms")?.scrollIntoView({ behavior: "smooth" })} className="text-[#68766f] hover:text-[#153c2e]">Gyms</button><button onClick={() => document.getElementById("trainers")?.scrollIntoView({ behavior: "smooth" })} className="text-[#68766f] hover:text-[#153c2e]">Trainers</button><button onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })} className="text-[#68766f] hover:text-[#153c2e]">About</button></nav>}
-          <div className="ml-auto flex items-center gap-3">
-            {signedIn && <button onClick={() => setPanel("notifications")} aria-label="Notifications" className="relative grid size-10 place-items-center rounded-full border border-black/10 bg-white hover:bg-[#eef1eb]">
-              <Icon name="bell" className="size-4.5" /><span className="absolute right-2 top-2 size-2 rounded-full bg-[#f27c54] ring-2 ring-white" />
-            </button>}
-            {!signedIn && <button onClick={() => { setAuthMode("register"); setAuthOpen(true); }} className="hidden rounded-full bg-[#153c2e] px-5 py-2.5 text-sm font-semibold text-white sm:block">Register</button>}
-            <button onClick={() => signedIn ? setPanel("profile") : (setAuthMode("login"), setAuthOpen(true))} className="flex items-center gap-2 rounded-full border border-black/10 bg-white py-1.5 pl-1.5 pr-3 text-sm font-semibold">
-              <span className="grid size-8 place-items-center rounded-full bg-[#e4efb1] text-xs">{signedIn ? approvedProfessionalRole === "Trainer" ? "TR" : approvedProfessionalRole === "Gym Owner" ? "GO" : "AM" : "IN"}</span>
-              <span className="hidden sm:inline">{signedIn ? approvedProfessionalRole ?? "Alex Morgan" : "Sign in"}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#f7f8f4] text-[#111827] flex flex-col font-sans">
+      {/* 
+        NO TOP BAR from Screenshot 1!
+        Screenshot 1 top bar (FitMap PyCharm / SQLite Edition | DB: fitmap.db Switch POV) is removed.
+      */}
 
-      <section className="relative overflow-hidden bg-[#09140f] text-white">
-        <img src="https://images.unsplash.com/photo-1637666062717-1c6bcfa4a4df?auto=format&fit=crop&w=1800&q=88" alt="Modern fitness center interior" className="absolute inset-0 size-full object-cover opacity-35" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07110d] via-[#07110d]/90 to-[#07110d]/25" />
-        <div className="relative mx-auto grid min-h-[590px] max-w-[1500px] items-center px-5 py-16 lg:grid-cols-[1fr_.7fr] lg:px-10">
-          <div className="max-w-3xl">
-            <p className="mb-5 text-sm font-bold uppercase tracking-[0.18em] text-[#dff86a]">Fitness, made easier</p>
-            <h1 className="text-5xl font-semibold leading-[.98] tracking-[-0.055em] sm:text-6xl lg:text-7xl">Find gyms.<br />Book trainers.<br /><span className="text-[#dff86a]">Reach your goals.</span></h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-white/65">Discover quality fitness centers near you, compare qualified trainers, and choose the membership that fits your routine—all in one place.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button onClick={() => document.getElementById("gyms")?.scrollIntoView({ behavior: "smooth" })} className="flex items-center gap-2 rounded-xl bg-[#dff86a] px-5 py-3.5 text-sm font-bold text-[#153c2e]">Find gyms near me <Icon name="pin" className="size-4" /></button>
-              <button onClick={() => setAuthOpen(true)} className="rounded-xl border border-white/25 bg-white/5 px-5 py-3.5 text-sm font-semibold backdrop-blur">Create free account</button>
+      {/* When signed in: Fixed Sidebar + Main Content Layout */}
+      {signedIn ? (
+        <div className="flex-1 flex">
+          {/* 
+            LEFT SIDEBAR matching Screenshot 2:
+            - Green circle avatar with user silhouette
+            - User Dashboard / Role POV header
+            - Fixed layout that NEVER scrolls with the page
+            - Bright green active item pill with dark text
+          */}
+          <aside
+            className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0d2116] text-white flex flex-col justify-between transition-transform duration-200 lg:translate-x-0 ${
+              sidebarOpenMobile ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            {/* Top User Header & Role (Matching Screenshot 2) */}
+            <div className="p-5 overflow-y-auto">
+              <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+                <div className="size-11 rounded-2xl bg-[#22c55e] text-[#0d2116] flex items-center justify-center font-bold text-xl shadow-md shrink-0">
+                  <Icon name="user" className="size-6 text-[#0d2116]" />
+                </div>
+                <div className="min-w-0">
+                  <h2 className="font-bold text-white text-base leading-tight truncate">
+                    {currentUser.role === "Member"
+                      ? "User Dashboard"
+                      : currentUser.role === "Trainer"
+                      ? "Trainer Dashboard"
+                      : currentUser.role === "Gym Owner"
+                      ? "Owner Dashboard"
+                      : "Admin Console"}
+                  </h2>
+                  <p className="text-xs font-semibold text-[#22c55e] mt-0.5">
+                    {currentUser.role} POV
+                  </p>
+                </div>
+              </div>
+
+              {/* Navigation Items (Matches Screenshot 2: Click does NOT scroll window!) */}
+              <nav className="mt-6 space-y-1.5">
+                {getSidebarNavItems().map((item) => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setSidebarOpenMobile(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition text-left cursor-pointer ${
+                        isActive
+                          ? "bg-[#22c55e] text-[#0d2116] font-bold shadow-sm"
+                          : "text-white/70 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <Icon name={item.icon} className="size-5 shrink-0" />
+                      <span className="truncate">{item.label}</span>
+                      {item.id === "applications" &&
+                        roleApplications.filter((a) => a.status === "Pending").length > 0 && (
+                          <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#f59e0b] text-black">
+                            {roleApplications.filter((a) => a.status === "Pending").length}
+                          </span>
+                        )}
+                      {item.id === "requests" &&
+                        trainerRequests.filter((r) => r.status === "Pending").length > 0 && (
+                          <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#f59e0b] text-black">
+                            {trainerRequests.filter((r) => r.status === "Pending").length}
+                          </span>
+                        )}
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
-            <div className="mt-10 flex flex-wrap gap-6 text-xs text-white/60"><span><b className="block text-xl text-white">19+</b>Partner gyms</span><span><b className="block text-xl text-white">48</b>Expert trainers</span><span><b className="block text-xl text-white">4.8</b>Average rating</span></div>
-          </div>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-[1500px] px-5 py-12 lg:px-10 lg:py-16">
-        <div className="mb-8 text-center"><p className="text-sm font-semibold text-[#59806f]">YOUR FITNESS JOURNEY</p><h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em]">How FitMap works</h2></div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {[["01", "Find gyms", "Discover quality gyms near your location."], ["02", "Choose a trainer", "Compare specialties and availability."], ["03", "Book & subscribe", "Reserve a trainer and select a plan."], ["04", "Pay securely", "Complete your reservation online."], ["05", "Get confirmed", "Receive instant booking confirmation."]].map(([number, title, description]) => <article key={number} className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm"><span className="grid size-10 place-items-center rounded-xl bg-[#edf3d1] text-xs font-bold text-[#3f705b]">{number}</span><h3 className="mt-5 font-semibold">{title}</h3><p className="mt-2 text-xs leading-5 text-[#718078]">{description}</p></article>)}
-        </div>
-      </section>
-
-      <section id="gyms" className="mx-auto max-w-[1500px] scroll-mt-24 px-5 py-8 lg:px-10 lg:py-10">
-        <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-          <div>
-            <p className="mb-2 text-sm font-semibold text-[#59806f]">SMART GYM LOCATOR</p>
-            <h2 className="max-w-2xl text-4xl font-semibold leading-[1.05] tracking-[-0.045em] md:text-5xl">Find your space.<br />Start your strongest chapter.</h2>
-          </div>
-          <p className="max-w-sm text-sm leading-6 text-[#68766f]">Explore top-rated gyms near you, meet expert trainers, and book your next session in minutes.</p>
-        </div>
-
-        <form onSubmit={(e) => { e.preventDefault(); document.getElementById("gym-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }} className="mb-5 flex flex-col gap-3 sm:flex-row">
-          <label className="flex h-14 min-w-0 flex-1 items-center gap-3 rounded-2xl border border-black/10 bg-white px-4 shadow-sm focus-within:border-[#59806f] focus-within:ring-2 focus-within:ring-[#dff86a]/60">
-            <Icon name="search" className="size-5 text-[#6f7c76]" />
-            <input list="gym-search-options" value={query} onChange={(e) => setQuery(e.target.value)} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#8a958f]" placeholder="Search gym, neighborhood, or city" />
-            <datalist id="gym-search-options">{gyms.flatMap((gym) => [<option key={gym.name} value={gym.name} />, <option key={gym.area} value={gym.area} />])}</datalist>
-            {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search" className="grid size-8 shrink-0 place-items-center rounded-full bg-[#f0f2ed] text-sm font-semibold">×</button>}
-          </label>
-          <button type="submit" className="h-14 rounded-2xl bg-[#dff86a] px-6 text-sm font-bold text-[#153c2e] hover:bg-[#d6ef61] sm:w-auto">Search gyms</button>
-          <button type="button" onClick={() => {
-            if (!navigator.geolocation) return notify("Location is unavailable in this browser.");
-            navigator.geolocation.getCurrentPosition(() => { setQuery(""); setFilter("All gyms"); notify("Location updated — showing gyms near BGC."); document.getElementById("gym-results")?.scrollIntoView({ behavior: "smooth" }); }, () => notify("Location access was not granted."));
-          }} className="flex h-14 items-center justify-center gap-2 rounded-2xl bg-[#153c2e] px-5 text-sm font-semibold text-white hover:bg-[#1c4b3a] sm:w-auto">
-            <Icon name="pin" className="size-4.5 text-[#dff86a]" /> Use my location
-          </button>
-        </form>
-
-        <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
-          {filters.map((item) => <button key={item} onClick={() => setFilter(item)} className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${filter === item ? "bg-[#dff86a] text-[#153c2e]" : "border border-black/10 bg-white text-[#64716a] hover:border-[#153c2e]"}`}>{item}</button>)}
-        </div>
-
-        <div id="gym-results" className="scroll-mt-28 grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(500px,0.95fr)]">
-          <div className="order-2 xl:order-1">
-            <div className="mb-4 flex items-center justify-between">
-              <p className="font-semibold">{visible.length} gyms near you</p>
-              <button onClick={() => setSortBy((value) => value === "Recommended" ? "Nearest first" : "Recommended")} className="flex items-center gap-1 text-sm font-medium text-[#68766f]">{sortBy} <Icon name="chevron" className="size-4 rotate-90" /></button>
+            {/* Sidebar Footer: User Card & Sign Out */}
+            <div className="p-4 border-t border-white/10 bg-[#0a1910]">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="size-8 rounded-full bg-[#22c55e] text-[#0d2116] font-bold text-xs flex items-center justify-center shrink-0">
+                  {currentUser.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .slice(0, 2)
+                    .join("")}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-white truncate">{currentUser.name}</p>
+                  <p className="text-[10px] text-white/50 truncate">{currentUser.email}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setSignedIn(false);
+                  notify("You have signed out.");
+                }}
+                className="w-full py-2.5 px-3 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer"
+              >
+                <Icon name="logout" className="size-4" /> Sign Out
+              </button>
             </div>
-            <div className="space-y-4">
-              {[...visible].sort((a, b) => sortBy === "Nearest first" ? a.distance - b.distance : b.rating - a.rating).map((gym) => (
-                <article onClick={() => setSelected(gym.id)} key={gym.id} className={`group grid cursor-pointer gap-4 rounded-3xl border bg-white p-3 transition sm:grid-cols-[220px_1fr] ${selected === gym.id ? "border-[#153c2e] shadow-[0_12px_35px_rgba(21,60,46,.10)]" : "border-black/5 hover:border-black/15"}`}>
-                  <div className="relative h-48 overflow-hidden rounded-2xl sm:h-full">
-                    <img src={gym.image} alt={`${gym.name} gym interior`} className="size-full object-cover transition duration-500 group-hover:scale-105" />
-                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold backdrop-blur">{gym.tag}</span>
-                    <button onClick={(e) => { e.stopPropagation(); setSaved((v) => v.includes(gym.id) ? v.filter((id) => id !== gym.id) : [...v, gym.id]); }} aria-label="Save gym" className={`absolute right-3 top-3 grid size-9 place-items-center rounded-full backdrop-blur ${saved.includes(gym.id) ? "bg-[#dff86a] text-[#153c2e]" : "bg-white/90"}`}><Icon name="heart" className={`size-4 ${saved.includes(gym.id) ? "fill-current" : ""}`} /></button>
+          </aside>
+
+          {/* MAIN CONTENT AREA for Signed-In User */}
+          <main className="flex-1 lg:pl-64 min-h-screen flex flex-col bg-[#f7f8f4]">
+            {/* Top Header inside Dashboard */}
+            <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200 px-5 py-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setSidebarOpenMobile((prev) => !prev)}
+                  className="lg:hidden p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  aria-label="Toggle Navigation"
+                >
+                  <Icon name="menu" className="size-5" />
+                </button>
+                <div>
+                  <h1 className="text-lg font-extrabold text-gray-900 leading-tight">
+                    FitMap · {currentUser.role} Space
+                  </h1>
+                  <p className="text-xs text-gray-500 hidden sm:block">
+                    Logged in as <b className="text-gray-800">{currentUser.name}</b> ({currentUser.email})
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  onClick={() => notify("No new notifications")}
+                  className="p-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 relative"
+                  aria-label="Notifications"
+                >
+                  <Icon name="bell" className="size-4.5" />
+                  <span className="absolute top-2 right-2 size-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+                </button>
+
+                <div className="flex items-center gap-2 pl-2 border-l border-gray-200">
+                  <div className="size-8 rounded-full bg-[#22c55e] text-[#0d2116] font-bold text-xs flex items-center justify-center">
+                    {currentUser.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .slice(0, 2)
+                      .join("")}
                   </div>
-                  <div className="flex min-w-0 flex-col p-2 sm:py-3 sm:pr-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div><h2 className="text-xl font-semibold tracking-[-0.025em]">{gym.name}</h2><p className="mt-1 text-sm text-[#6e7a74]">{gym.area} · {gym.distance} km away</p></div>
-                      <div className="flex items-center gap-1 text-sm font-semibold"><Icon name="star" className="size-4 fill-[#f4bd50] stroke-[#f4bd50]" />{gym.rating}<span className="font-normal text-[#8a958f]">({gym.reviews})</span></div>
-                    </div>
-                    <div className="mt-5 flex flex-wrap gap-2 text-xs font-medium text-[#526159]">
-                      <span className="flex items-center gap-1.5 rounded-full bg-[#f1f3ef] px-3 py-1.5"><Icon name="clock" className="size-3.5" /> {gym.open}</span>
-                      <span className="flex items-center gap-1.5 rounded-full bg-[#f1f3ef] px-3 py-1.5"><Icon name="users" className="size-3.5" /> 6 trainers</span>
-                    </div>
-                    <div className="mt-auto flex items-end justify-between pt-6">
-                      <p><span className="text-xl font-bold">₱{gym.price}</span><span className="text-sm text-[#77837c]"> / day</span></p>
-                      <button onClick={(e) => { e.stopPropagation(); setSelected(gym.id); setGymDetails(gym.id); }} className="rounded-xl bg-[#153c2e] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1d4d3b]">View details</button>
-                    </div>
+                  <div className="hidden sm:block text-left text-xs">
+                    <p className="font-bold text-gray-900 leading-tight">{currentUser.name}</p>
+                    <span className="text-[10px] text-emerald-700 font-semibold uppercase tracking-wider">
+                      {currentUser.role}
+                    </span>
                   </div>
-                </article>
+                </div>
+              </div>
+            </header>
+
+            {/* Content Switcher based on Active Tab */}
+            <div className="p-5 sm:p-8 flex-1 max-w-6xl w-full mx-auto">
+              {/* =========================================
+                  1. MEMBER POV TABS
+                  ========================================= */}
+              {currentUser.role === "Member" && (
+                <>
+                  {/* Member: Dashboard Tab */}
+                  {activeTab === "dashboard" && (
+                    <div className="space-y-6">
+                      <div className="bg-[#0b1c14] text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-lg">
+                        <div className="relative z-10 max-w-2xl">
+                          <span className="px-3 py-1 rounded-full bg-[#22c55e]/20 text-[#86efac] text-xs font-bold uppercase tracking-wider">
+                            Active Member Portal
+                          </span>
+                          <h2 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
+                            Ready for your next workout, {currentUser.name.split(" ")[0]}?
+                          </h2>
+                          <p className="text-sm text-gray-300 mt-2">
+                            You have an upcoming training session tomorrow at Iron Zone Fitness with Coach Michael Reyes.
+                          </p>
+                          <div className="mt-5 flex flex-wrap gap-3">
+                            <button
+                              onClick={() => setActiveTab("bookings")}
+                              className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs shadow hover:bg-[#1eb354] transition"
+                            >
+                              View My Bookings
+                            </button>
+                            <button
+                              onClick={() => setActiveTab("trainers")}
+                              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition"
+                            >
+                              Book Another Coach
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 4 Stats Cards */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Upcoming Sessions</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">
+                            {bookings.filter((b) => b.status === "Confirmed").length}
+                          </p>
+                          <p className="text-xs text-emerald-600 font-semibold mt-1">Confirmed with coaches</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Active Pass</p>
+                          <p className="text-3xl font-black text-[#22c55e] mt-2">Monthly</p>
+                          <p className="text-xs text-gray-500 mt-1">Iron Zone Fitness</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Spent</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">₱3,550</p>
+                          <p className="text-xs text-emerald-600 font-semibold mt-1">All memberships & coaches</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Workout Streak</p>
+                          <p className="text-3xl font-black text-amber-500 mt-2">14 Days</p>
+                          <p className="text-xs text-gray-500 mt-1">Top 5% of members</p>
+                        </div>
+                      </div>
+
+                      {/* Recent Bookings Preview */}
+                      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-extrabold text-gray-900 text-lg">Upcoming Schedule</h3>
+                          <button
+                            onClick={() => setActiveTab("bookings")}
+                            className="text-xs font-bold text-emerald-700 hover:underline"
+                          >
+                            View All Bookings →
+                          </button>
+                        </div>
+                        <div className="divide-y divide-gray-100">
+                          {bookings.map((b) => (
+                            <div key={b.id} className="py-3.5 flex items-center justify-between flex-wrap gap-2">
+                              <div>
+                                <p className="font-bold text-sm text-gray-900">{b.sessionType}</p>
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                  {b.gymName} · {b.trainerName} · <b className="text-gray-700">{b.date} at {b.time}</b>
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span
+                                  className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                                    b.status === "Confirmed"
+                                      ? "bg-emerald-100 text-emerald-800"
+                                      : "bg-amber-100 text-amber-800"
+                                  }`}
+                                >
+                                  {b.status}
+                                </span>
+                                <span className="font-bold text-sm text-gray-900">₱{b.price}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Member: My Bookings Tab */}
+                  {activeTab === "bookings" && (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between flex-wrap gap-4">
+                        <div>
+                          <h2 className="text-2xl font-black text-gray-900">My Reserved Sessions</h2>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Manage your trainer appointments and gym day passes.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setActiveTab("trainers")}
+                          className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-white font-bold text-xs shadow hover:bg-[#1eb354] transition"
+                        >
+                          + Book New Trainer
+                        </button>
+                      </div>
+
+                      <div className="grid gap-4">
+                        {bookings.map((b) => (
+                          <div
+                            key={b.id}
+                            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                          >
+                            <div className="flex items-start gap-4">
+                              <div className="size-12 rounded-2xl bg-emerald-50 text-[#22c55e] flex items-center justify-center font-bold text-xl shrink-0">
+                                🏋️
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <h3 className="font-extrabold text-base text-gray-900">{b.sessionType}</h3>
+                                  <span
+                                    className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                                      b.status === "Confirmed"
+                                        ? "bg-emerald-100 text-emerald-800"
+                                        : "bg-amber-100 text-amber-800"
+                                    }`}
+                                  >
+                                    {b.status}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-gray-600 mt-1">
+                                  Coach: <b className="text-gray-900">{b.trainerName}</b> · Facility:{" "}
+                                  <b className="text-gray-900">{b.gymName}</b>
+                                </p>
+                                <p className="text-xs text-emerald-700 font-semibold mt-1">
+                                  🗓️ {b.date} · ⏰ {b.time}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0">
+                              <span className="font-black text-base text-gray-900 mr-2">₱{b.price}</span>
+                              <button
+                                onClick={() => notify(`Session on ${b.date} rescheduled.`)}
+                                className="px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-xs font-semibold text-gray-700"
+                              >
+                                Reschedule
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setBookings((list) => list.filter((item) => item.id !== b.id));
+                                  notify("Booking cancelled.");
+                                }}
+                                className="px-3 py-1.5 rounded-xl border border-red-200 hover:bg-red-50 text-xs font-semibold text-red-600"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Member: My Memberships Tab (Active item in Screenshot 2!) */}
+                  {activeTab === "memberships" && (
+                    <div className="space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">My Memberships</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          View active facility access passes and explore partner gym plans.
+                        </p>
+                      </div>
+
+                      {/* Active Membership Digital Card */}
+                      <div className="bg-gradient-to-br from-[#102c22] to-[#0a1b15] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-emerald-500/20 relative overflow-hidden">
+                        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-white/10 pb-5">
+                          <div>
+                            <span className="px-3 py-1 rounded-full bg-[#22c55e] text-[#0d2116] text-xs font-extrabold uppercase tracking-wider">
+                              {userMembership.status} PASS
+                            </span>
+                            <h3 className="text-2xl font-black mt-2 text-white">{userMembership.planName}</h3>
+                            <p className="text-sm text-gray-300 mt-0.5">Facility: {userMembership.gymName}</p>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-xs text-gray-400">Valid Until</span>
+                            <p className="text-lg font-bold text-[#86efac]">{userMembership.validUntil}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+                          <div className="flex items-center gap-4">
+                            <div className="h-10 w-32 bg-white/20 rounded flex items-center justify-center font-mono text-xs tracking-widest text-white/80">
+                              ||||||| | ||| ||
+                            </div>
+                            <span className="text-xs text-gray-400">Pass ID: #FM-2026-0982</span>
+                          </div>
+                          <button
+                            onClick={() => notify("Membership renewed for another 30 days!")}
+                            className="px-5 py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs shadow hover:bg-[#1eb354] transition"
+                          >
+                            Renew Access Now
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Available Gym Plans to Subscribe */}
+                      <div>
+                        <h3 className="font-extrabold text-gray-900 text-lg mb-4">
+                          Explore More Gym Plans & Passes
+                        </h3>
+                        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                          {[
+                            { name: "Day Pass", duration: "1 Day", price: "₱150", desc: "Single entry access" },
+                            { name: "Weekly Fit", duration: "7 Days", price: "₱700", desc: "1 week unlimited workouts" },
+                            { name: "Monthly Unlimited", duration: "30 Days", price: "₱2,200", desc: "Best value for regulars" },
+                            { name: "Quarterly Pass", duration: "90 Days", price: "₱5,800", desc: "Includes free assessment" },
+                          ].map((plan) => (
+                            <div
+                              key={plan.name}
+                              className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs flex flex-col justify-between"
+                            >
+                              <div>
+                                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                                  {plan.duration}
+                                </span>
+                                <h4 className="font-bold text-gray-900 text-base mt-2">{plan.name}</h4>
+                                <p className="text-xs text-gray-500 mt-1">{plan.desc}</p>
+                                <p className="text-2xl font-black text-gray-900 mt-4">{plan.price}</p>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  setUserMembership({
+                                    planName: plan.name,
+                                    gymName: "Iron Zone Fitness",
+                                    validUntil: "30 days from today",
+                                    price: plan.price,
+                                    status: "Active",
+                                  });
+                                  notify(`Subscribed to ${plan.name} at Iron Zone Fitness!`);
+                                }}
+                                className="mt-4 w-full py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs hover:bg-[#1eb354] transition"
+                              >
+                                Subscribe
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Member: Find Trainers Tab */}
+                  {activeTab === "trainers" && (
+                    <div className="space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">Certified Coaches & Trainers</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Book one-on-one sessions, strength assessments, and customized programs.
+                        </p>
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        {trainersList.map((tr) => (
+                          <div
+                            key={tr.id}
+                            className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xs flex flex-col justify-between"
+                          >
+                            <div>
+                              <div className="relative h-52 overflow-hidden">
+                                <img src={tr.image} alt={tr.name} className="size-full object-cover" />
+                                <span className="absolute bottom-2 left-2 bg-black/70 backdrop-blur text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                                  {tr.experience} experience
+                                </span>
+                              </div>
+                              <div className="p-4">
+                                <div className="flex items-start justify-between gap-1">
+                                  <div>
+                                    <h3 className="font-bold text-sm text-gray-900">{tr.name}</h3>
+                                    <p className="text-xs text-emerald-700 font-semibold mt-0.5">{tr.specialty}</p>
+                                    <p className="text-[11px] text-gray-400 mt-1">📍 {tr.gymName}</p>
+                                  </div>
+                                  <span className="flex items-center gap-0.5 text-xs font-bold text-amber-500">
+                                    ★ {tr.rating}
+                                  </span>
+                                </div>
+                                <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between text-xs">
+                                  <span className="text-gray-500">Rate:</span>
+                                  <span className="font-bold text-gray-900">₱{tr.hourlyRate}/session</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="p-4 pt-0">
+                              <button
+                                onClick={() => {
+                                  setBookingModalTrainer(tr.id);
+                                  setBookingModalGym(1);
+                                }}
+                                className="w-full py-2.5 rounded-xl bg-[#22c55e] text-white font-bold text-xs hover:bg-[#1eb354] transition"
+                              >
+                                Book Session
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Member: Apply as Partner Tab */}
+                  {activeTab === "partner" && (
+                    <div className="max-w-2xl bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-xs space-y-6">
+                      <div>
+                        <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                          Partnership Application
+                        </span>
+                        <h2 className="text-2xl font-black text-gray-900 mt-2">Become a Verified Partner</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Submit your coaching credentials or gym business permits for Admin verification.
+                        </p>
+                      </div>
+
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          const target = e.currentTarget as HTMLFormElement;
+                          const requestedRole = (target.elements.namedItem("partner_role") as HTMLSelectElement).value as
+                            | "Trainer"
+                            | "Gym Owner";
+                          const specialtyOrGym = (target.elements.namedItem("partner_title") as HTMLInputElement).value;
+                          const proofs = (target.elements.namedItem("partner_proofs") as HTMLTextAreaElement).value;
+
+                          const newApp: RoleApplication = {
+                            id: Date.now(),
+                            applicant: currentUser.name,
+                            role: requestedRole,
+                            specialtyOrGym,
+                            proof: proofs,
+                            status: "Pending",
+                            date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+                          };
+
+                          setRoleApplications((prev) => [newApp, ...prev]);
+                          notify("Application submitted! Admin will review your credentials.");
+                          setActiveTab("dashboard");
+                        }}
+                        className="space-y-4"
+                      >
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Applying As</label>
+                          <select
+                            name="partner_role"
+                            className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none bg-white"
+                          >
+                            <option value="Trainer">Certified Fitness Trainer / Coach</option>
+                            <option value="Gym Owner">Gym Facility Owner / Operator</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                            Specialty Focus or Gym Business Name
+                          </label>
+                          <input
+                            name="partner_title"
+                            required
+                            placeholder="e.g. Olympic Weightlifting & Rehab or Iron Elite Gym"
+                            className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                            Certifications, License Numbers & Proof
+                          </label>
+                          <textarea
+                            name="partner_proofs"
+                            required
+                            rows={3}
+                            placeholder="Provide your certification IDs, issuing body, years experience, and city permit references..."
+                            className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                          />
+                        </div>
+
+                        <div className="p-3 bg-emerald-50 rounded-xl text-xs text-emerald-900 flex items-center gap-2">
+                          <Icon name="shield" className="size-4 shrink-0 text-[#22c55e]" />
+                          Once approved by FitMap Admin, your account gains access to the Trainer or Gym Owner workspace.
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full py-3.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-sm shadow hover:bg-[#1eb354] transition"
+                        >
+                          Submit Application for Review
+                        </button>
+                      </form>
+                    </div>
+                  )}
+
+                  {/* Member: Find Gyms Tab */}
+                  {activeTab === "gyms" && (
+                    <div className="space-y-6">
+                      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div>
+                          <h2 className="text-2xl font-black text-gray-900">Partner Gyms & Fitness Centers</h2>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Discover verified facilities, check pricing, and view equipment.
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search gym or area..."
+                            className="px-3.5 py-2 rounded-xl border border-gray-200 bg-white text-xs outline-none focus:border-emerald-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+                        {visibleGyms.map((gym) => (
+                          <div
+                            key={gym.id}
+                            className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xs flex flex-col justify-between"
+                          >
+                            <div>
+                              <div className="relative h-44">
+                                <img src={gym.image} alt={gym.name} className="size-full object-cover" />
+                                <span className="absolute top-2.5 left-2.5 bg-white/95 text-gray-800 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                                  {gym.tag}
+                                </span>
+                                <span className="absolute top-2.5 right-2.5 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur">
+                                  {gym.distance} km
+                                </span>
+                              </div>
+                              <div className="p-4">
+                                <div className="flex items-start justify-between">
+                                  <h3 className="font-bold text-base text-gray-900">{gym.name}</h3>
+                                  <span className="text-xs font-bold text-amber-500">★ {gym.rating}</span>
+                                </div>
+                                <p className="text-xs text-gray-500 mt-1">📍 {gym.area}</p>
+                                <p className="text-[11px] text-emerald-600 font-semibold mt-1">● {gym.open}</p>
+                                <div className="flex flex-wrap gap-1 mt-3">
+                                  {gym.facilities.slice(0, 3).map((f) => (
+                                    <span key={f} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                                      {f}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="p-4 pt-2 border-t border-gray-50 flex items-center justify-between">
+                              <span className="text-xs text-gray-500">
+                                From <b className="text-gray-900 text-sm">₱{gym.price}</b>
+                              </span>
+                              <button
+                                onClick={() => setSelectedGymForModal(gym.id)}
+                                className="px-3.5 py-1.5 rounded-xl bg-[#22c55e] text-white font-bold text-xs"
+                              >
+                                View Details
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* =========================================
+                  2. TRAINER POV TABS
+                  ========================================= */}
+              {currentUser.role === "Trainer" && (
+                <>
+                  {activeTab === "dashboard" && (
+                    <div className="space-y-6">
+                      <div className="bg-[#0b1c14] text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-lg">
+                        <span className="px-3 py-1 rounded-full bg-[#22c55e]/20 text-[#86efac] text-xs font-bold uppercase tracking-wider">
+                          Certified Trainer Workspace
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
+                          Coach Michael Reyes · Iron Zone Fitness
+                        </h2>
+                        <p className="text-sm text-gray-300 mt-2">
+                          You have 2 pending client session requests and 18 confirmed bookings this week.
+                        </p>
+                        <div className="mt-5 flex gap-3">
+                          <button
+                            onClick={() => setActiveTab("requests")}
+                            className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs shadow"
+                          >
+                            Review Client Requests ({trainerRequests.filter((r) => r.status === "Pending").length})
+                          </button>
+                          <button
+                            onClick={() => setActiveTab("schedule")}
+                            className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs"
+                          >
+                            Update Availability
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Coach Rating</p>
+                          <p className="text-3xl font-black text-amber-500 mt-2">★ 4.9</p>
+                          <p className="text-xs text-gray-500 mt-1">Based on 128 client reviews</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Sessions This Week</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">18</p>
+                          <p className="text-xs text-emerald-600 font-semibold mt-1">+4 from last week</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Active Clients</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">42</p>
+                          <p className="text-xs text-gray-500 mt-1">Regular trainees</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Monthly Earnings</p>
+                          <p className="text-3xl font-black text-[#22c55e] mt-2">₱28,450</p>
+                          <p className="text-xs text-emerald-600 font-semibold mt-1">+14.2% growth</p>
+                        </div>
+                      </div>
+
+                      {/* Today's Schedule Overview */}
+                      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs">
+                        <h3 className="font-extrabold text-gray-900 text-lg mb-4">Today’s Confirmed Sessions</h3>
+                        <div className="space-y-3">
+                          {[
+                            { client: "Jamie Santos", focus: "Strength Assessment & Mobility", time: "9:00 AM" },
+                            { client: "Chris Tan", focus: "Upper Body Hypertrophy", time: "1:30 PM" },
+                            { client: "Bea Cruz", focus: "Functional Conditioning", time: "4:00 PM" },
+                          ].map((s) => (
+                            <div
+                              key={s.client}
+                              className="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between"
+                            >
+                              <div>
+                                <p className="font-bold text-sm text-gray-900">{s.client}</p>
+                                <p className="text-xs text-gray-500 mt-0.5">{s.focus}</p>
+                              </div>
+                              <span className="font-bold text-sm text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg">
+                                {s.time}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Trainer: Client Requests Tab (Accept / Decline) */}
+                  {activeTab === "requests" && (
+                    <div className="space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">Client Booking Requests</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Accept or decline incoming training sessions from FitMap members.
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        {trainerRequests.map((req) => (
+                          <div
+                            key={req.id}
+                            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                          >
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-extrabold text-base text-gray-900">{req.client}</h3>
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                                    req.status === "Pending"
+                                      ? "bg-amber-100 text-amber-800"
+                                      : req.status === "Accepted"
+                                      ? "bg-emerald-100 text-emerald-800"
+                                      : "bg-red-100 text-red-800"
+                                  }`}
+                                >
+                                  {req.status}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-600 mt-1">
+                                Session: <b className="text-gray-800">{req.session}</b>
+                              </p>
+                              <p className="text-xs text-emerald-700 font-semibold mt-0.5">🗓️ {req.schedule}</p>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              {req.status === "Pending" ? (
+                                <>
+                                  <button
+                                    onClick={() => {
+                                      setTrainerRequests((list) =>
+                                        list.map((item) => (item.id === req.id ? { ...item, status: "Declined" } : item))
+                                      );
+                                      notify(`Declined request from ${req.client}.`);
+                                    }}
+                                    className="px-3.5 py-2 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold"
+                                  >
+                                    Decline
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setTrainerRequests((list) =>
+                                        list.map((item) => (item.id === req.id ? { ...item, status: "Accepted" } : item))
+                                      );
+                                      notify(`Accepted ${req.client}'s session! Added to your schedule.`);
+                                    }}
+                                    className="px-4 py-2 rounded-xl bg-[#22c55e] text-white hover:bg-[#1eb354] text-xs font-bold shadow"
+                                  >
+                                    Accept Booking
+                                  </button>
+                                </>
+                              ) : (
+                                <span className="text-xs text-gray-400 font-semibold">Managed</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Trainer: Weekly Schedule Tab (Interactive toggle) */}
+                  {activeTab === "schedule" && (
+                    <div className="space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">Weekly Availability & Schedule</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Click any time slot below to toggle between Available and Booked status.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                        {trainerSchedule.map((slot) => (
+                          <button
+                            key={slot.id}
+                            onClick={() => {
+                              setTrainerSchedule((list) =>
+                                list.map((item) => (item.id === slot.id ? { ...item, isBooked: !item.isBooked } : item))
+                              );
+                              notify(
+                                `${slot.day} ${slot.time} toggled to ${
+                                  !slot.isBooked ? "Booked" : "Available"
+                                }`
+                              );
+                            }}
+                            className={`p-4 rounded-2xl border text-left transition cursor-pointer ${
+                              slot.isBooked
+                                ? "bg-amber-50 border-amber-200 text-amber-900"
+                                : "bg-emerald-50 border-emerald-200 text-emerald-950 hover:border-emerald-400"
+                            }`}
+                          >
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
+                              {slot.day}
+                            </span>
+                            <p className="text-xs font-bold mt-1 leading-tight">{slot.time}</p>
+                            <span
+                              className={`mt-3 inline-block px-2 py-0.5 rounded text-[10px] font-bold ${
+                                slot.isBooked ? "bg-amber-200 text-amber-900" : "bg-[#22c55e] text-white"
+                              }`}
+                            >
+                              {slot.isBooked ? "Booked" : "Available (Click to toggle)"}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Trainer: My Clients Tab */}
+                  {activeTab === "clients" && (
+                    <div className="space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">Active Clients Roster</h2>
+                        <p className="text-sm text-gray-500 mt-1">Trainee progress and past session notes.</p>
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {[
+                          { name: "Nicole Garcia", goal: "Hypertrophy & Squat Depth", sessions: 12, phone: "0918 111 2222" },
+                          { name: "John Dela Cruz", goal: "Marathon & Core Endurance", sessions: 8, phone: "0919 555 6666" },
+                          { name: "Paolo Reyes", goal: "Fat Loss & Conditioning", sessions: 5, phone: "0920 333 4444" },
+                        ].map((c) => (
+                          <div key={c.name} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="size-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-sm">
+                                {c.name.split(" ").map((n) => n[0]).join("")}
+                              </div>
+                              <div>
+                                <h3 className="font-bold text-sm text-gray-900">{c.name}</h3>
+                                <p className="text-xs text-gray-500">{c.phone}</p>
+                              </div>
+                            </div>
+                            <p className="text-xs text-gray-600">
+                              Focus: <b className="text-gray-900">{c.goal}</b>
+                            </p>
+                            <p className="text-xs text-emerald-700 font-semibold mt-1">
+                              {c.sessions} completed sessions
+                            </p>
+                            <button
+                              onClick={() => notify(`Opened training notes for ${c.name}.`)}
+                              className="mt-4 w-full py-2 rounded-xl border border-gray-200 text-xs font-bold hover:bg-gray-50"
+                            >
+                              View Notes & Logs
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Trainer: Partner Gyms Tab */}
+                  {activeTab === "gyms" && (
+                    <div className="space-y-6">
+                      <h2 className="text-2xl font-black text-gray-900">Affiliated Gym Locations</h2>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {gymsList.map((g) => (
+                          <div key={g.id} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-start gap-4">
+                            <img src={g.image} alt={g.name} className="size-20 rounded-xl object-cover shrink-0" />
+                            <div>
+                              <h3 className="font-bold text-base text-gray-900">{g.name}</h3>
+                              <p className="text-xs text-gray-500 mt-0.5">{g.address}</p>
+                              <p className="text-xs text-emerald-600 font-semibold mt-1">● {g.open}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* =========================================
+                  3. GYM OWNER POV TABS
+                  ========================================= */}
+              {currentUser.role === "Gym Owner" && (
+                <>
+                  {activeTab === "dashboard" && (
+                    <div className="space-y-6">
+                      <div className="bg-[#0b1c14] text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-lg">
+                        <span className="px-3 py-1 rounded-full bg-[#22c55e]/20 text-[#86efac] text-xs font-bold uppercase tracking-wider">
+                          Gym Management Workspace
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
+                          {gymProfile.name} Operations Hub
+                        </h2>
+                        <p className="text-sm text-gray-300 mt-2">
+                          Address: {gymProfile.address} · Phone: {gymProfile.phone}
+                        </p>
+                        <div className="mt-5 flex gap-3">
+                          <button
+                            onClick={() => setActiveTab("gym-profile")}
+                            className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs shadow"
+                          >
+                            Edit Gym Details
+                          </button>
+                          <button
+                            onClick={() => setActiveTab("location")}
+                            className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs"
+                          >
+                            Update Map Pin
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Monthly Revenue</p>
+                          <p className="text-3xl font-black text-[#22c55e] mt-2">₱184,600</p>
+                          <p className="text-xs text-emerald-600 font-semibold mt-1">+11.8% vs last month</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Active Subscribers</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">87</p>
+                          <p className="text-xs text-gray-500 mt-1">Daily, weekly, monthly</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Weekly Check-Ins</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">64</p>
+                          <p className="text-xs text-emerald-600 font-semibold mt-1">High facility usage</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Rostered Coaches</p>
+                          <p className="text-3xl font-black text-gray-900 mt-2">6</p>
+                          <p className="text-xs text-gray-500 mt-1">All verified</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Gym Owner: Gym Profile & Edit Tab */}
+                  {activeTab === "gym-profile" && (
+                    <div className="max-w-2xl bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-xs space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">Edit Gym Profile</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Update your gym public information visible to all fitness seekers.
+                        </p>
+                      </div>
+
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          notify("Gym Profile details saved successfully!");
+                          setActiveTab("dashboard");
+                        }}
+                        className="space-y-4"
+                      >
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Gym Name</label>
+                          <input
+                            value={gymProfile.name}
+                            onChange={(e) => setGymProfile({ ...gymProfile, name: e.target.value })}
+                            className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Complete Address</label>
+                          <input
+                            value={gymProfile.address}
+                            onChange={(e) => setGymProfile({ ...gymProfile, address: e.target.value })}
+                            className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                          />
+                        </div>
+
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Phone Number</label>
+                            <input
+                              value={gymProfile.phone}
+                              onChange={(e) => setGymProfile({ ...gymProfile, phone: e.target.value })}
+                              className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Operating Hours</label>
+                            <input
+                              value={gymProfile.hours}
+                              onChange={(e) => setGymProfile({ ...gymProfile, hours: e.target.value })}
+                              className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Facility Description</label>
+                          <textarea
+                            rows={3}
+                            value={gymProfile.description}
+                            onChange={(e) => setGymProfile({ ...gymProfile, description: e.target.value })}
+                            className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full py-3.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-sm shadow hover:bg-[#1eb354] transition"
+                        >
+                          Save Changes
+                        </button>
+                      </form>
+                    </div>
+                  )}
+
+                  {/* Gym Owner: Subscribers Tab */}
+                  {activeTab === "subscribers" && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-xl font-black text-gray-900">Current Members & Subscribers</h2>
+                        <span className="text-xs text-gray-500 font-semibold">87 Active</span>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-gray-50 text-gray-500 border-b border-gray-100">
+                            <tr>
+                              <th className="p-3">Member</th>
+                              <th className="p-3">Plan</th>
+                              <th className="p-3">Started</th>
+                              <th className="p-3">Renewal Date</th>
+                              <th className="p-3">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {[
+                              { name: "John Dela Cruz", plan: "Monthly Unlimited", start: "May 24", renewal: "Jun 24", status: "Active" },
+                              { name: "Jamie Santos", plan: "Monthly Pass", start: "May 2", renewal: "Jun 2", status: "Active" },
+                              { name: "Bea Cruz", plan: "Weekly Pass", start: "May 20", renewal: "May 27", status: "Renewal Due" },
+                              { name: "Nicole Garcia", plan: "Quarterly Pass", start: "Jan 15", renewal: "Apr 15", status: "Active" },
+                            ].map((row) => (
+                              <tr key={row.name} className="hover:bg-gray-50">
+                                <td className="p-3 font-bold text-gray-900">{row.name}</td>
+                                <td className="p-3 font-medium text-gray-700">{row.plan}</td>
+                                <td className="p-3 text-gray-500">{row.start}</td>
+                                <td className="p-3 font-semibold text-emerald-700">{row.renewal}</td>
+                                <td className="p-3">
+                                  <span
+                                    className={`px-2.5 py-0.5 rounded-full font-bold ${
+                                      row.status === "Active"
+                                        ? "bg-emerald-100 text-emerald-800"
+                                        : "bg-amber-100 text-amber-800"
+                                    }`}
+                                  >
+                                    {row.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Gym Owner: Map Location Pin Tab */}
+                  {activeTab === "location" && (
+                    <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-xs space-y-5">
+                      <div>
+                        <h2 className="text-2xl font-black text-gray-900">Pin Gym Map Location</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Click anywhere inside the map area below to reposition the public pin for your facility.
+                        </p>
+                      </div>
+
+                      <div
+                        onClick={(e) => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          const newX = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+                          const newY = Math.round(((e.clientY - rect.top) / rect.height) * 100);
+                          setGymProfile((prev) => ({ ...prev, pinX: newX, pinY: newY }));
+                          notify(`Pin placed at ${newX}%, ${newY}%`);
+                        }}
+                        className="map-grid relative h-72 cursor-crosshair rounded-2xl border border-gray-200 overflow-hidden shadow-inner"
+                      >
+                        <span
+                          style={{ left: `${gymProfile.pinX}%`, top: `${gymProfile.pinY}%` }}
+                          className="absolute z-10 size-11 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#102c22] text-[#22c55e] flex items-center justify-center shadow-2xl ring-4 ring-white animate-bounce"
+                        >
+                          <Icon name="pin" className="size-6 text-[#22c55e]" />
+                        </span>
+                        <div className="absolute bottom-3 left-3 bg-white/95 px-3 py-1.5 rounded-xl text-xs font-bold shadow text-gray-700">
+                          📍 {gymProfile.address}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => notify("Gym map location saved and published!")}
+                        className="w-full py-3.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-sm shadow hover:bg-[#1eb354] transition"
+                      >
+                        Save Public Map Location
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Gym Owner: Trainer Roster */}
+                  {activeTab === "trainers" && (
+                    <div className="space-y-6">
+                      <h2 className="text-2xl font-black text-gray-900">Assigned Gym Coaches</h2>
+                      <div className="grid sm:grid-cols-3 gap-4">
+                        {trainersList.slice(0, 3).map((t) => (
+                          <div key={t.id} className="bg-white rounded-2xl border border-gray-100 p-4">
+                            <img src={t.image} alt={t.name} className="size-16 rounded-full object-cover mx-auto mb-2" />
+                            <h3 className="font-bold text-center text-sm">{t.name}</h3>
+                            <p className="text-xs text-center text-gray-500">{t.specialty}</p>
+                            <p className="text-xs text-center text-amber-500 font-bold mt-1">★ {t.rating}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Gym Owner: Reservations */}
+                  {activeTab === "reservations" && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs">
+                      <h2 className="text-xl font-black text-gray-900 mb-4">Facility Check-Ins & Reservations</h2>
+                      <div className="space-y-3">
+                        {bookings.map((b) => (
+                          <div key={b.id} className="p-3.5 rounded-xl bg-gray-50 flex items-center justify-between">
+                            <div>
+                              <p className="font-bold text-sm text-gray-900">{b.customerName}</p>
+                              <p className="text-xs text-gray-500">{b.sessionType} · {b.date} at {b.time}</p>
+                            </div>
+                            <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                              {b.status}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* =========================================
+                  4. ADMIN POV TABS
+                  ========================================= */}
+              {currentUser.role === "Admin" && (
+                <>
+                  {activeTab === "dashboard" && (
+                    <div className="space-y-6">
+                      <div className="bg-[#1f2937] text-white rounded-3xl p-6 sm:p-8 relative shadow-lg">
+                        <span className="px-3 py-1 rounded-full bg-[#22c55e]/20 text-[#86efac] text-xs font-bold uppercase tracking-wider">
+                          FitMap Central Administration
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
+                          Platform Telemetry & Governance
+                        </h2>
+                        <p className="text-sm text-gray-300 mt-2">
+                          Manage gym verifications, trainer licensing approvals, and financial logs.
+                        </p>
+                      </div>
+
+                      {/* 6 Admin Metrics */}
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                        <div className="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-xs">
+                          <p className="text-2xl font-black text-gray-900">{gymsList.length}</p>
+                          <p className="text-[11px] text-gray-500 font-semibold mt-0.5">Total Gyms</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-xs">
+                          <p className="text-2xl font-black text-gray-900">{trainersList.length}</p>
+                          <p className="text-[11px] text-gray-500 font-semibold mt-0.5">Trainers</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-xs">
+                          <p className="text-2xl font-black text-gray-900">152</p>
+                          <p className="text-[11px] text-gray-500 font-semibold mt-0.5">Total Users</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-xs">
+                          <p className="text-2xl font-black text-gray-900">{bookings.length + 40}</p>
+                          <p className="text-[11px] text-gray-500 font-semibold mt-0.5">Bookings</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-xs">
+                          <p className="text-2xl font-black text-gray-900">96</p>
+                          <p className="text-[11px] text-gray-500 font-semibold mt-0.5">Active Passes</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-xs">
+                          <p className="text-2xl font-black text-[#22c55e]">₱298,450</p>
+                          <p className="text-[11px] text-gray-500 font-semibold mt-0.5">Gross Revenue</p>
+                        </div>
+                      </div>
+
+                      {/* Partner Applications Queue */}
+                      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-extrabold text-gray-900 text-lg">Partner Role Verification Requests</h3>
+                          <span className="text-xs bg-amber-50 text-amber-800 font-bold px-3 py-1 rounded-full">
+                            {roleApplications.filter((a) => a.status === "Pending").length} Pending Review
+                          </span>
+                        </div>
+                        <div className="space-y-3">
+                          {roleApplications.map((app) => (
+                            <div
+                              key={app.id}
+                              className="p-4 rounded-xl border border-gray-100 bg-gray-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                            >
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-bold text-sm text-gray-900">{app.applicant}</h4>
+                                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
+                                    {app.role}
+                                  </span>
+                                  <span
+                                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                      app.status === "Approved"
+                                        ? "bg-emerald-100 text-emerald-800"
+                                        : app.status === "Pending"
+                                        ? "bg-amber-100 text-amber-800"
+                                        : "bg-red-100 text-red-800"
+                                    }`}
+                                  >
+                                    {app.status}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-gray-600 mt-1">
+                                  Focus: <b className="text-gray-800">{app.specialtyOrGym}</b> · Credentials: {app.proof}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center gap-2">
+                                {app.status === "Pending" ? (
+                                  <>
+                                    <button
+                                      onClick={() => {
+                                        setRoleApplications((list) =>
+                                          list.map((item) => (item.id === app.id ? { ...item, status: "Declined" } : item))
+                                        );
+                                        notify(`Declined ${app.applicant}'s request.`);
+                                      }}
+                                      className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold"
+                                    >
+                                      Decline
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        setRoleApplications((list) =>
+                                          list.map((item) => (item.id === app.id ? { ...item, status: "Approved" } : item))
+                                        );
+                                        notify(`Approved ${app.applicant} as a verified ${app.role}!`);
+                                      }}
+                                      className="px-3.5 py-1.5 rounded-lg bg-[#22c55e] text-white hover:bg-[#1eb354] text-xs font-bold shadow"
+                                    >
+                                      Approve
+                                    </button>
+                                  </>
+                                ) : (
+                                  <span className="text-xs font-bold text-gray-400">Processed</span>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin: Applications Tab */}
+                  {activeTab === "applications" && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs space-y-4">
+                      <h2 className="text-xl font-black text-gray-900">Partner Applications</h2>
+                      <div className="space-y-3">
+                        {roleApplications.map((app) => (
+                          <div key={app.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-between">
+                            <div>
+                              <p className="font-bold text-sm">{app.applicant} ({app.role})</p>
+                              <p className="text-xs text-gray-500">{app.specialtyOrGym} · {app.proof}</p>
+                            </div>
+                            <span className="font-bold text-xs">{app.status}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin: Reports Tab */}
+                  {activeTab === "reports" && (
+                    <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-xs space-y-6">
+                      <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                        <div>
+                          <h2 className="text-2xl font-black text-gray-900">Platform Analytics & Management Report</h2>
+                          <p className="text-xs text-gray-500 mt-1">Export official system report for management review</p>
+                        </div>
+                        <button
+                          onClick={() => window.print()}
+                          className="px-4 py-2 rounded-xl bg-[#22c55e] text-white font-bold text-xs flex items-center gap-1.5 shadow"
+                        >
+                          <Icon name="printer" className="size-4" /> Print Report
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                        <div className="p-3 bg-white rounded-xl shadow-xs text-center">
+                          <p className="text-xs font-bold text-gray-400">Total Gyms</p>
+                          <p className="text-2xl font-black text-gray-900 mt-1">{gymsList.length}</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl shadow-xs text-center">
+                          <p className="text-xs font-bold text-gray-400">Total Trainers</p>
+                          <p className="text-2xl font-black text-gray-900 mt-1">{trainersList.length}</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl shadow-xs text-center">
+                          <p className="text-xs font-bold text-gray-400">Total Users</p>
+                          <p className="text-2xl font-black text-gray-900 mt-1">152</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl shadow-xs text-center">
+                          <p className="text-xs font-bold text-gray-400">Gross Revenue</p>
+                          <p className="text-2xl font-black text-[#22c55e] mt-1">₱298,450</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="font-bold text-gray-900 text-sm mb-3">Membership Breakdown</h3>
+                        <div className="space-y-2">
+                          {[
+                            { name: "Monthly Pass (Unlimited)", percent: "58%", color: "bg-[#102c22]" },
+                            { name: "Weekly Fit Pass", percent: "27%", color: "bg-[#22c55e]" },
+                            { name: "Daily Pass", percent: "15%", color: "bg-[#f59e0b]" },
+                          ].map((item) => (
+                            <div key={item.name} className="space-y-1">
+                              <div className="flex justify-between text-xs font-semibold">
+                                <span>{item.name}</span>
+                                <b>{item.percent}</b>
+                              </div>
+                              <div className="h-2.5 rounded-full bg-gray-100 overflow-hidden">
+                                <div style={{ width: item.percent }} className={`h-full rounded-full ${item.color}`} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin: Gyms Directory Tab */}
+                  {activeTab === "gyms-admin" && (
+                    <div className="space-y-6">
+                      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-blue-100 text-blue-800">
+                              Facility Infrastructure
+                            </span>
+                          </div>
+                          <h2 className="text-2xl font-black text-gray-900 mt-1">Gyms Directory</h2>
+                          <p className="text-sm text-gray-500 mt-0.5">
+                            Manage physical partner facilities, verify business permits, and monitor public map listings.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => notify("New partner gym onboarding form opened.")}
+                          className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs shadow hover:bg-[#1eb354] transition shrink-0"
+                        >
+                          + Add Partner Gym
+                        </button>
+                      </div>
+
+                      {/* Purpose Explanation Card */}
+                      <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-start gap-3 text-xs text-emerald-950">
+                        <Icon name="building" className="size-5 shrink-0 text-[#22c55e] mt-0.5" />
+                        <div>
+                          <p className="font-bold text-emerald-900">What is the Gyms Directory used for?</p>
+                          <p className="mt-0.5 text-emerald-800 leading-relaxed">
+                            The <b>Gyms Directory</b> represents the <b>physical fitness centers and brick-and-mortar facilities</b> partnered with FitMap (e.g. Iron Zone Fitness, Pulse Fitness Hub, Powerhouse Gym). Admins use this to inspect gym business permits, verify safety standards, manage map coordinates, assign affiliated coaches, and govern which facilities appear in the public search directory.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Gyms Table */}
+                      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xs">
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left text-xs">
+                            <thead className="bg-gray-50 text-gray-500 border-b border-gray-100">
+                              <tr>
+                                <th className="p-3.5">Gym Facility</th>
+                                <th className="p-3.5">Location / Address</th>
+                                <th className="p-3.5">Operating Hours</th>
+                                <th className="p-3.5">Assigned Coaches</th>
+                                <th className="p-3.5">Rating</th>
+                                <th className="p-3.5">Verification</th>
+                                <th className="p-3.5 text-right">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                              {gymsList.map((gym) => (
+                                <tr key={gym.id} className="hover:bg-gray-50/80">
+                                  <td className="p-3.5">
+                                    <div className="flex items-center gap-3">
+                                      <img
+                                        src={gym.image}
+                                        alt={gym.name}
+                                        className="size-10 rounded-xl object-cover shrink-0"
+                                      />
+                                      <div>
+                                        <p className="font-bold text-gray-900 text-sm leading-tight">{gym.name}</p>
+                                        <p className="text-[10px] text-gray-400 mt-0.5">ID: #{gym.id} · {gym.phone}</p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="p-3.5 text-gray-600 max-w-xs truncate">{gym.address}</td>
+                                  <td className="p-3.5 font-medium text-gray-700">{gym.open}</td>
+                                  <td className="p-3.5">
+                                    <span className="font-semibold text-gray-900">
+                                      {gym.id === 1 ? "3 Coaches" : gym.id === 2 ? "4 Coaches" : "2 Coaches"}
+                                    </span>
+                                  </td>
+                                  <td className="p-3.5">
+                                    <span className="font-bold text-amber-500">★ {gym.rating}</span>{" "}
+                                    <span className="text-gray-400">({gym.reviews})</span>
+                                  </td>
+                                  <td className="p-3.5">
+                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                      Verified
+                                    </span>
+                                  </td>
+                                  <td className="p-3.5 text-right space-x-1">
+                                    <button
+                                      onClick={() => setSelectedGymForModal(gym.id)}
+                                      className="px-2.5 py-1 rounded-lg border border-gray-200 text-xs font-semibold hover:bg-gray-100"
+                                    >
+                                      View
+                                    </button>
+                                    <button
+                                      onClick={() => notify(`${gym.name} status updated.`)}
+                                      className="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700"
+                                    >
+                                      Manage
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin: Membership Plans Tab */}
+                  {activeTab === "memberships-admin" && (
+                    <div className="space-y-6">
+                      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-purple-100 text-purple-800">
+                              Access Tiers & Commercial Pricing
+                            </span>
+                          </div>
+                          <h2 className="text-2xl font-black text-gray-900 mt-1">Membership Plans</h2>
+                          <p className="text-sm text-gray-500 mt-0.5">
+                            Manage standardized pass tiers, subscription rates, active member distribution, and plan revenues.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => notify("New membership package tier modal opened.")}
+                          className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-xs shadow hover:bg-[#1eb354] transition shrink-0"
+                        >
+                          + Create New Plan Tier
+                        </button>
+                      </div>
+
+                      {/* Purpose Explanation Card */}
+                      <div className="p-4 rounded-2xl bg-purple-50 border border-purple-100 flex items-start gap-3 text-xs text-purple-950">
+                        <Icon name="card" className="size-5 shrink-0 text-purple-600 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-purple-900">What are Membership Plans used for?</p>
+                          <p className="mt-0.5 text-purple-800 leading-relaxed">
+                            While the <b>Gyms Directory</b> tracks physical fitness facilities, <b>Membership Plans</b> represent the <b>commercial access passes and subscription products</b> that users purchase to enter gyms (e.g. Daily Pass, Weekly Fit, Monthly Pass, 3 Months Pass). Admins use this to standardize pricing guidelines, set revenue splits between FitMap and facility owners, monitor subscriber volume per duration, and activate or modify pass tiers.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Plans Grid with Stats */}
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {[
+                          {
+                            name: "Day Pass",
+                            duration: "1 Day (24h)",
+                            basePrice: "₱150",
+                            subscribers: "184 Users",
+                            revenue: "₱27,600",
+                            status: "Active",
+                            popular: false,
+                          },
+                          {
+                            name: "Weekly Fit",
+                            duration: "7 Days",
+                            basePrice: "₱700",
+                            subscribers: "426 Users",
+                            revenue: "₱298,200",
+                            status: "Active",
+                            popular: false,
+                          },
+                          {
+                            name: "Monthly Unlimited",
+                            duration: "30 Days",
+                            basePrice: "₱2,200",
+                            subscribers: "674 Users",
+                            revenue: "₱1,482,800",
+                            status: "Active",
+                            popular: true,
+                          },
+                          {
+                            name: "Quarterly Pass",
+                            duration: "90 Days",
+                            basePrice: "₱5,800",
+                            subscribers: "92 Users",
+                            revenue: "₱533,600",
+                            status: "Active",
+                            popular: false,
+                          },
+                        ].map((plan) => (
+                          <div
+                            key={plan.name}
+                            className={`bg-white rounded-2xl border p-5 shadow-xs flex flex-col justify-between ${
+                              plan.popular ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-gray-200"
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-700">
+                                  {plan.duration}
+                                </span>
+                                {plan.popular && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#22c55e] text-[#0d2116]">
+                                    Most Popular
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="font-extrabold text-base text-gray-900">{plan.name}</h3>
+                              <p className="text-2xl font-black text-gray-900 mt-2">{plan.basePrice}</p>
+                              <div className="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-xs">
+                                <div className="flex justify-between text-gray-500">
+                                  <span>Active Subscribers:</span>
+                                  <b className="text-gray-900">{plan.subscribers}</b>
+                                </div>
+                                <div className="flex justify-between text-gray-500">
+                                  <span>Gross Sales:</span>
+                                  <b className="text-emerald-700 font-bold">{plan.revenue}</b>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                {plan.status}
+                              </span>
+                              <button
+                                onClick={() => notify(`${plan.name} pricing editor opened.`)}
+                                className="text-xs font-bold text-emerald-700 hover:underline cursor-pointer"
+                              >
+                                Edit Rate & Perks
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin: Trainers Directory Tab */}
+                  {activeTab === "trainers-admin" && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-xl font-black text-gray-900">Certified Trainers Directory</h2>
+                          <p className="text-xs text-gray-500 mt-0.5">Manage coach credentials and affiliated gyms.</p>
+                        </div>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-gray-50 text-gray-500 border-b border-gray-100">
+                            <tr>
+                              <th className="p-3">Coach</th>
+                              <th className="p-3">Specialty</th>
+                              <th className="p-3">Affiliated Facility</th>
+                              <th className="p-3">Hourly Rate</th>
+                              <th className="p-3">Rating</th>
+                              <th className="p-3 text-right">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {trainersList.map((t) => (
+                              <tr key={t.id} className="hover:bg-gray-50">
+                                <td className="p-3 font-bold text-gray-900">{t.name}</td>
+                                <td className="p-3 text-emerald-700 font-semibold">{t.specialty}</td>
+                                <td className="p-3 text-gray-600">{t.gymName}</td>
+                                <td className="p-3 font-bold">₱{t.hourlyRate}</td>
+                                <td className="p-3 font-semibold text-amber-500">★ {t.rating}</td>
+                                <td className="p-3 text-right">
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                    Verified
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin: All Bookings Tab */}
+                  {activeTab === "bookings-admin" && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-xl font-black text-gray-900">Platform-Wide Bookings Log</h2>
+                          <p className="text-xs text-gray-500 mt-0.5">Live transaction and reservation records.</p>
+                        </div>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-gray-50 text-gray-500 border-b border-gray-100">
+                            <tr>
+                              <th className="p-3">Customer</th>
+                              <th className="p-3">Gym Facility</th>
+                              <th className="p-3">Coach / Pass</th>
+                              <th className="p-3">Schedule</th>
+                              <th className="p-3">Price</th>
+                              <th className="p-3 text-right">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {bookings.map((b) => (
+                              <tr key={b.id} className="hover:bg-gray-50">
+                                <td className="p-3 font-bold text-gray-900">{b.customerName}</td>
+                                <td className="p-3 text-gray-600">{b.gymName}</td>
+                                <td className="p-3 font-medium text-emerald-700">{b.trainerName || b.sessionType}</td>
+                                <td className="p-3 text-gray-500">{b.date} at {b.time}</td>
+                                <td className="p-3 font-bold">₱{b.price}</td>
+                                <td className="p-3 text-right">
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                    {b.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </main>
+        </div>
+      ) : (
+        /* =========================================
+            5. PUBLIC / DISCOVERY POV (Guest view)
+            ========================================= */
+        <div className="flex-1 flex flex-col">
+          {/* Public Header */}
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="size-10 rounded-xl bg-[#0d2116] text-[#22c55e] flex items-center justify-center font-bold">
+                  <Icon name="dumbbell" className="size-5" />
+                </div>
+                <span className="text-xl font-black tracking-tight text-gray-900">FitMap</span>
+              </div>
+
+              <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("public-gyms");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="hover:text-black cursor-pointer"
+                >
+                  Find Gyms
+                </button>
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("public-trainers");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="hover:text-black cursor-pointer"
+                >
+                  Trainers
+                </button>
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("public-how");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="hover:text-black cursor-pointer"
+                >
+                  How It Works
+                </button>
+              </nav>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    setAuthTab("login");
+                    setAuthModalOpen(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-xs font-bold text-gray-700"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => {
+                    setAuthTab("register");
+                    setAuthModalOpen(true);
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-[#22c55e] text-white hover:bg-[#1eb354] text-xs font-bold shadow"
+                >
+                  Create Account
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* Hero Section */}
+          <section className="bg-[#0b1c14] text-white relative overflow-hidden py-16 sm:py-24 px-5">
+            <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.2fr_.8fr] gap-10 items-center">
+              <div>
+                <span className="text-xs font-extrabold uppercase tracking-widest text-[#22c55e]">
+                  Fitness discovery, made simple
+                </span>
+                <h1 className="text-4xl sm:text-6xl font-black mt-4 leading-tight tracking-tight">
+                  Find Gyms.<br />Book Trainers.<br />
+                  <span className="text-[#22c55e]">Reach Your Goals.</span>
+                </h1>
+                <p className="mt-5 text-base text-gray-300 max-w-xl leading-relaxed">
+                  Discover quality fitness centers near you, compare certified coaches, and subscribe to flexible daily,
+                  weekly, or monthly memberships all in one place.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById("public-gyms");
+                      if (el) el.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="px-6 py-3.5 rounded-xl bg-[#22c55e] text-[#0d2116] font-bold text-sm shadow hover:bg-[#1eb354]"
+                  >
+                    Find Gyms Near Me 🏋️
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAuthTab("register");
+                      setAuthModalOpen(true);
+                    }}
+                    className="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm"
+                  >
+                    Join FitMap Today
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Persona Tester Card */}
+              <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur">
+                <span className="text-xs font-bold text-[#22c55e] uppercase tracking-wider block mb-2">
+                  Interactive Roles & Testing
+                </span>
+                <h3 className="font-extrabold text-xl text-white">Experience All 4 FitMap POVs</h3>
+                <p className="text-xs text-gray-300 mt-1 mb-5">
+                  Select any persona to jump directly into their dedicated workspace:
+                </p>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    onClick={() => switchRole("Member")}
+                    className="p-3 rounded-xl bg-white/10 hover:bg-[#22c55e] hover:text-[#0d2116] text-left transition"
+                  >
+                    <b className="block text-xs">🏋️ John Dela Cruz</b>
+                    <span className="text-[10px] text-gray-300">Member POV</span>
+                  </button>
+                  <button
+                    onClick={() => switchRole("Trainer")}
+                    className="p-3 rounded-xl bg-white/10 hover:bg-[#22c55e] hover:text-[#0d2116] text-left transition"
+                  >
+                    <b className="block text-xs">🥊 Coach Michael</b>
+                    <span className="text-[10px] text-gray-300">Trainer POV</span>
+                  </button>
+                  <button
+                    onClick={() => switchRole("Gym Owner")}
+                    className="p-3 rounded-xl bg-white/10 hover:bg-[#22c55e] hover:text-[#0d2116] text-left transition"
+                  >
+                    <b className="block text-xs">🏢 Carlos Mendoza</b>
+                    <span className="text-[10px] text-gray-300">Gym Owner POV</span>
+                  </button>
+                  <button
+                    onClick={() => switchRole("Admin")}
+                    className="p-3 rounded-xl bg-white/10 hover:bg-[#22c55e] hover:text-[#0d2116] text-left transition"
+                  >
+                    <b className="block text-xs">🛡️ Administrator</b>
+                    <span className="text-[10px] text-gray-300">Admin Console</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* How FitMap Works */}
+          <section id="public-how" className="max-w-7xl mx-auto px-5 py-16 w-full">
+            <div className="text-center mb-10">
+              <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest">How It Works</span>
+              <h2 className="text-3xl font-black text-gray-900 mt-1">Your 5-Step Fitness Journey</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 md:grid-cols-5 gap-4">
+              {[
+                { step: "01", title: "Find Gyms", desc: "Discover quality fitness centers near your area." },
+                { step: "02", title: "Choose Trainer", desc: "Compare specialties, rates, and verified reviews." },
+                { step: "03", title: "Book & Subscribe", desc: "Reserve a session or activate daily & monthly passes." },
+                { step: "04", title: "Pay Online", desc: "Seamless instant booking confirmation." },
+                { step: "05", title: "Work Out", desc: "Show your digital pass and crush your goals." },
+              ].map((item) => (
+                <div key={item.step} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs">
+                  <span className="size-9 rounded-xl bg-emerald-50 text-emerald-800 font-bold text-xs flex items-center justify-center">
+                    {item.step}
+                  </span>
+                  <h3 className="font-extrabold text-sm text-gray-900 mt-4">{item.title}</h3>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">{item.desc}</p>
+                </div>
               ))}
-              {visible.length === 0 && <div className="rounded-3xl border border-dashed border-black/15 bg-white p-12 text-center text-[#68766f]">No gyms match your search. Try another area.</div>}
             </div>
-          </div>
-
-          <div className="order-1 h-[470px] overflow-hidden rounded-3xl border border-black/5 bg-[#dfe8dc] shadow-sm xl:sticky xl:top-28 xl:order-2 xl:h-[calc(100vh-9rem)]">
-            <div className="map-grid relative size-full overflow-hidden">
-              <div className="absolute inset-0 opacity-70">
-                <span className="road absolute left-[-10%] top-[27%] h-3 w-[120%] rotate-[-8deg]" />
-                <span className="road absolute left-[-10%] top-[62%] h-4 w-[120%] rotate-[12deg]" />
-                <span className="road absolute left-[47%] top-[-10%] h-[120%] w-3 rotate-[20deg]" />
-                <span className="road absolute left-[18%] top-[-10%] h-[120%] w-2 rotate-[-15deg]" />
-              </div>
-              <div className="absolute left-5 top-5 rounded-xl bg-white/95 px-4 py-3 text-sm font-medium shadow-lg backdrop-blur">Bonifacio Global City</div>
-              {visible.map((gym) => <button key={gym.id} onClick={() => setSelected(gym.id)} style={{ left: gym.x, top: gym.y }} className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-xl px-3 py-2 text-sm font-bold shadow-lg transition hover:-translate-y-[55%] ${selected === gym.id ? "z-10 bg-[#153c2e] text-white ring-4 ring-[#dff86a]/50" : "bg-white text-[#153c2e]"}`}>₱{gym.price}</button>)}
-              {visible.length === 0 && <div className="absolute left-1/2 top-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white/95 p-5 text-center shadow-lg"><p className="font-semibold">No map results</p><p className="mt-1 text-xs text-[#718078]">Clear your search or try a nearby city.</p></div>}
-              <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-xs font-semibold shadow-lg"><span className="size-2.5 rounded-full bg-[#3e8b70] ring-4 ring-[#3e8b70]/20" /> You are here</div>
-              <button onClick={() => notify("Route preview enabled. Select a gym pin for directions.")} aria-label="Show route" className="absolute bottom-5 right-5 grid size-11 place-items-center rounded-full bg-white shadow-lg"><Icon name="route" className="size-5" /></button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="trainers" className="scroll-mt-24 bg-white">
-        <div className="mx-auto max-w-[1500px] px-5 py-16 lg:px-10 lg:py-20">
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-sm font-semibold text-[#59806f]">EXPERT GUIDANCE</p><h2 className="mt-2 text-4xl font-semibold tracking-[-0.045em]">Popular trainers</h2></div><p className="max-w-md text-sm leading-6 text-[#718078]">Meet qualified coaches who can help turn your fitness goals into a practical, sustainable plan.</p></div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              ["Coach Michael Reyes", "Strength & conditioning", "4.9", "https://images.unsplash.com/photo-1758875568932-0eefd3e60090?auto=format&fit=crop&w=700&q=85"],
-              ["Coach David Cruz", "Bodybuilding specialist", "4.8", "https://images.unsplash.com/photo-1585892478508-130c50eb7a69?auto=format&fit=crop&w=700&q=85"],
-              ["Coach Marco Santos", "Functional fitness", "4.9", "https://images.unsplash.com/photo-1738523686578-f18348c8292b?auto=format&fit=crop&w=700&q=85"],
-              ["Coach Luis Mendoza", "HIIT & mobility", "4.7", "https://images.unsplash.com/photo-1708011108842-30966718105a?auto=format&fit=crop&w=700&q=85"],
-            ].map(([name, specialty, rating, image]) => <article key={name} className="overflow-hidden rounded-3xl border border-black/5 bg-[#f7f8f4]"><div className="h-56 overflow-hidden"><img src={image} alt={`${name}, ${specialty}`} className="size-full object-cover object-top transition duration-500 hover:scale-105" /></div><div className="p-5"><div className="flex items-start justify-between gap-3"><div><h3 className="font-semibold">{name}</h3><p className="mt-1 text-xs text-[#718078]">{specialty}</p></div><span className="flex items-center gap-1 text-sm font-bold"><Icon name="star" className="size-3.5 fill-[#f4bd50] stroke-[#f4bd50]" />{rating}</span></div><button onClick={() => setTrainerDetails(name)} className="mt-5 w-full rounded-xl bg-[#153c2e] py-3 text-sm font-semibold text-white">View profile & schedule</button></div></article>)}
-          </div>
-        </div>
-      </section>
-
-      <section id="about" className="scroll-mt-24 border-t border-black/5 bg-[#153c2e] text-white">
-        <div className="mx-auto max-w-[1500px] px-5 py-16 lg:px-10 lg:py-24">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-end">
-            <div>
-              <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#dff86a]">Why FitMap exists</p>
-              <h2 className="max-w-3xl text-4xl font-semibold leading-[1.05] tracking-[-0.045em] sm:text-5xl">Fitness discovery should feel effortless, not outdated.</h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-white/65">FitMap brings gyms, qualified trainers, flexible memberships, and online reservations into one accessible platform—removing the need to visit multiple fitness centers just to compare services and pricing.</p>
-          </div>
-
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {[
-              ["01", "Discover nearby gyms", "Use location-based search and an interactive map to compare quality facilities, services, distance, and availability."],
-              ["02", "Book with confidence", "Explore trainer qualifications and specialties, reserve preferred schedules, and receive automated confirmation online."],
-              ["03", "Join on your terms", "Choose daily, weekly, or monthly plans and manage memberships without lengthy in-person registration."],
-            ].map(([number, title, description]) => <article key={number} className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"><span className="text-sm font-bold text-[#dff86a]">{number}</span><h3 className="mt-8 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-white/60">{description}</p></article>)}
-          </div>
-
-          <div className="mt-5 grid overflow-hidden rounded-3xl bg-[#dff86a] text-[#153c2e] lg:grid-cols-[1fr_1.2fr]">
-            <div className="p-7 sm:p-10">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#4f705f]">Built for fitness businesses</p>
-              <h3 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">One system for smoother operations.</h3>
-              <p className="mt-4 text-sm leading-6 text-[#466354]">Gym owners gain a centralized workspace for managing profiles, trainers, packages, reservations, customer records, and performance reports.</p>
-              {signedIn ? <button onClick={() => setAdminMode(true)} className="mt-7 flex items-center gap-2 rounded-xl bg-[#153c2e] px-5 py-3 text-sm font-semibold text-white">Explore admin portal <Icon name="chevron" className="size-4" /></button> : <button onClick={() => { setAuthMode("register"); setAuthOpen(true); }} className="mt-7 flex items-center gap-2 rounded-xl bg-[#153c2e] px-5 py-3 text-sm font-semibold text-white">Join FitMap <Icon name="chevron" className="size-4" /></button>}
-            </div>
-            <div className="grid grid-cols-2 gap-px bg-[#153c2e]/15">
-              {[["19", "Partner gyms"], ["48", "Qualified trainers"], ["1.2K+", "Active members"], ["342", "Monthly bookings"]].map(([value, label]) => <div key={label} className="grid min-h-32 place-content-center bg-[#dff86a] p-5 text-center"><p className="text-3xl font-bold tracking-[-0.04em]">{value}</p><p className="mt-1 text-xs font-medium text-[#557060]">{label}</p></div>)}
-            </div>
-          </div>
-
-          <footer className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-7 text-sm text-white/45 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2 text-white"><div className="grid size-8 place-items-center rounded-lg bg-[#dff86a] text-[#153c2e]"><Icon name="dumbbell" className="size-4" /></div><span className="font-bold">FitMap</span></div>
-            <p>Connecting people, trainers, and fitness centers through smarter technology.</p>
-          </footer>
-        </div>
-      </section>
-
-      {booking && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-[#0d2119]/45 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setBooking(false)}>
-          <section onMouseDown={(e) => e.stopPropagation()} className="w-full max-w-md rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl">
-            {!confirmed ? <>
-              <div className="mb-6 flex items-start justify-between"><div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Quick booking</p><h2 className="mt-1 text-2xl font-semibold">{gyms.find(g => g.id === selected)?.name}</h2></div><button onClick={() => setBooking(false)} className="grid size-9 place-items-center rounded-full bg-[#f0f2ed] text-lg">×</button></div>
-              <div className="space-y-3">
-                <button className="flex w-full items-center justify-between rounded-2xl border border-black/10 p-4 text-left"><span className="flex items-center gap-3"><Icon name="calendar" /><span><b className="block text-sm">Tomorrow, May 24</b><small className="text-[#718078]">Choose another date</small></span></span><Icon name="chevron" className="size-4" /></button>
-                <div className="grid grid-cols-3 gap-2">{["9:00 AM", "2:30 PM", "6:00 PM"].map((time, i) => <button key={time} className={`rounded-xl py-3 text-sm font-semibold ${i === 1 ? "bg-[#dff86a]" : "border border-black/10"}`}>{time}</button>)}</div>
-              </div>
-              <button onClick={() => setConfirmed(true)} className="mt-6 w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Confirm booking · ₱{gyms.find(g => g.id === selected)?.price}</button>
-            </> : <div className="py-8 text-center"><div className="mx-auto mb-5 grid size-16 place-items-center rounded-full bg-[#dff86a]"><Icon name="check" className="size-8" /></div><h2 className="text-2xl font-semibold">You’re all set!</h2><p className="mt-2 text-sm leading-6 text-[#68766f]">Your gym pass is confirmed for tomorrow at 2:30 PM. We’ve sent the details to your account.</p><button onClick={() => { setBooking(false); setConfirmed(false); }} className="mt-6 w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Done</button></div>}
           </section>
-        </div>
-      )}
 
-      {authOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-[#0d2119]/50 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setAuthOpen(false)}>
-          <section onMouseDown={(e) => e.stopPropagation()} className="w-full max-w-md rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8">
-            <div className="mb-7 flex items-start justify-between">
+          {/* Public Gym Finder Section */}
+          <section id="public-gyms" className="max-w-7xl mx-auto px-5 py-10 w-full">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-6">
               <div>
-                <div className="mb-4 grid size-11 place-items-center rounded-xl bg-[#153c2e] text-[#dff86a]"><Icon name="dumbbell" /></div>
-                <p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Welcome to FitMap</p>
-                <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">{authMode === "login" ? "Good to see you again." : "Start your fitness journey."}</h2>
+                <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest">Gym Locator</span>
+                <h2 className="text-3xl font-black text-gray-900 mt-1">Explore Nearby Fitness Centers</h2>
               </div>
-              <button onClick={() => setAuthOpen(false)} aria-label="Close" className="grid size-9 shrink-0 place-items-center rounded-full bg-[#f0f2ed] text-lg">×</button>
+              <div className="flex gap-2">
+                {["All gyms", "Under 1 km", "Top rated", "Open now"].map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setSelectedFilter(f)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+                      selectedFilter === f
+                        ? "bg-[#22c55e] text-white"
+                        : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="mb-6 grid grid-cols-2 rounded-xl bg-[#f0f2ed] p-1">
-              <button onClick={() => setAuthMode("login")} className={`rounded-lg py-2.5 text-sm font-semibold ${authMode === "login" ? "bg-white shadow-sm" : "text-[#718078]"}`}>Login</button>
-              <button onClick={() => setAuthMode("register")} className={`rounded-lg py-2.5 text-sm font-semibold ${authMode === "register" ? "bg-white shadow-sm" : "text-[#718078]"}`}>Register</button>
+
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+              {visibleGyms.map((g) => (
+                <div
+                  key={g.id}
+                  className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xs flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="relative h-44">
+                      <img src={g.image} alt={g.name} className="size-full object-cover" />
+                      <span className="absolute top-2 left-2 bg-white/95 text-xs font-bold px-2 py-0.5 rounded shadow">
+                        {g.tag}
+                      </span>
+                    </div>
+                    <div className="p-4">
+                      <div className="flex justify-between items-start">
+                        <h3 className="font-bold text-sm text-gray-900">{g.name}</h3>
+                        <span className="text-xs font-bold text-amber-500">★ {g.rating}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">📍 {g.area}</p>
+                    </div>
+                  </div>
+                  <div className="p-4 pt-0">
+                    <button
+                      onClick={() => setSelectedGymForModal(g.id)}
+                      className="w-full py-2.5 rounded-xl bg-[#22c55e] text-white font-bold text-xs"
+                    >
+                      View Gym Details & Rates
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-            <form onSubmit={(e) => { e.preventDefault(); setSignedIn(true); setAuthOpen(false); }} className="space-y-4">
-              {authMode === "register" && <label className="block"><span className="mb-1.5 block text-sm font-semibold">Full name</span><input required placeholder="Enter your full name" className="h-12 w-full rounded-xl border border-black/10 bg-[#fafbf8] px-4 text-sm outline-none focus:border-[#59806f] focus:ring-2 focus:ring-[#dff86a]" /></label>}
-              <label className="block"><span className="mb-1.5 block text-sm font-semibold">Email address</span><input required type="email" placeholder="you@example.com" className="h-12 w-full rounded-xl border border-black/10 bg-[#fafbf8] px-4 text-sm outline-none focus:border-[#59806f] focus:ring-2 focus:ring-[#dff86a]" /></label>
-              <label className="block"><span className="mb-1.5 block text-sm font-semibold">Password</span><input required minLength={8} type="password" placeholder="At least 8 characters" className="h-12 w-full rounded-xl border border-black/10 bg-[#fafbf8] px-4 text-sm outline-none focus:border-[#59806f] focus:ring-2 focus:ring-[#dff86a]" /></label>
-              {authMode === "register" && <label className="flex items-start gap-2 text-xs leading-5 text-[#68766f]"><input required type="checkbox" className="mt-1 accent-[#153c2e]" /> I agree to the Terms of Service and Privacy Policy.</label>}
-              {authMode === "login" && <div className="flex items-center justify-between text-xs"><label className="flex items-center gap-2 text-[#68766f]"><input type="checkbox" className="accent-[#153c2e]" /> Remember me</label><button onClick={() => notify("Password reset link sent to your email.")} type="button" className="font-semibold text-[#356650]">Forgot password?</button></div>}
-              <button type="submit" className="w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white hover:bg-[#1d4d3b]">{authMode === "login" ? "Secure login" : "Create my account"}</button>
+          </section>
+
+          {/* Public Trainers Showcase */}
+          <section id="public-trainers" className="max-w-7xl mx-auto px-5 py-12 w-full">
+            <div className="text-center mb-8">
+              <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest">Expert Guidance</span>
+              <h2 className="text-3xl font-black text-gray-900 mt-1">Popular Certified Coaches</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {trainersList.map((t) => (
+                <div key={t.id} className="bg-white rounded-2xl border border-gray-100 p-4 text-center">
+                  <img src={t.image} alt={t.name} className="size-24 rounded-full object-cover mx-auto mb-3" />
+                  <h3 className="font-bold text-sm text-gray-900">{t.name}</h3>
+                  <p className="text-xs text-emerald-700 font-semibold">{t.specialty}</p>
+                  <p className="text-xs text-gray-500 mt-1">📍 {t.gymName}</p>
+                  <button
+                    onClick={() => {
+                      switchRole("Member");
+                      setActiveTab("trainers");
+                    }}
+                    className="mt-4 w-full py-2 rounded-xl bg-[#0d2116] text-[#22c55e] font-bold text-xs hover:bg-black transition"
+                  >
+                    Book with Coach
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* =========================================
+          GLOBAL MODALS
+          ========================================= */}
+
+      {/* 1. LOGIN / SIGN UP MODAL (Fixes Login & Registration) */}
+      {authModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setAuthModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setAuthModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
+            >
+              <Icon name="x" className="size-5" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="size-12 rounded-2xl bg-emerald-50 text-[#22c55e] flex items-center justify-center mx-auto mb-2 font-bold text-xl">
+                <Icon name="dumbbell" className="size-6 text-[#22c55e]" />
+              </div>
+              <h2 className="text-2xl font-black text-gray-900">
+                {authTab === "login" ? "Welcome Back to FitMap" : "Create Your FitMap Account"}
+              </h2>
+              <p className="text-xs text-gray-500 mt-1">
+                {authTab === "login"
+                  ? "Sign in to access your workout passes and coach schedules"
+                  : "Join as a member, coach, or facility owner"}
+              </p>
+            </div>
+
+            {/* Tab Selector */}
+            <div className="flex rounded-xl bg-gray-100 p-1 mb-5">
+              <button
+                type="button"
+                onClick={() => setAuthTab("login")}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${
+                  authTab === "login" ? "bg-white text-gray-900 shadow-xs" : "text-gray-500"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => setAuthTab("register")}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${
+                  authTab === "register" ? "bg-white text-gray-900 shadow-xs" : "text-gray-500"
+                }`}
+              >
+                Create Account
+              </button>
+            </div>
+
+            {/* Quick Demo Logins for instant testing */}
+            <div className="mb-5 bg-emerald-50 border border-emerald-100 rounded-2xl p-3">
+              <p className="text-[11px] font-bold text-emerald-950 mb-2 flex items-center gap-1">
+                ⚡ Quick 1-Click Persona Sign-In:
+              </p>
+              <div className="grid grid-cols-2 gap-1.5">
+                {(["Member", "Trainer", "Gym Owner", "Admin"] as Role[]).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => {
+                      switchRole(r);
+                      setAuthModalOpen(false);
+                    }}
+                    className="p-2 rounded-lg bg-white border border-emerald-200 hover:bg-emerald-100 text-left text-xs font-bold text-gray-800 transition"
+                  >
+                    {r === "Member"
+                      ? "🏋️ John (Member)"
+                      : r === "Trainer"
+                      ? "🥊 Michael (Trainer)"
+                      : r === "Gym Owner"
+                      ? "🏢 Carlos (Owner)"
+                      : "🛡️ Admin"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Login Form */}
+            {authTab === "login" ? (
+              <form onSubmit={handleLoginSubmit} className="space-y-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <label className="flex items-center gap-1.5 cursor-pointer">
+                    <input type="checkbox" defaultChecked className="accent-emerald-600 rounded" /> Remember me
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthModalOpen(false);
+                      setForgotModalOpen(true);
+                    }}
+                    className="text-emerald-700 font-bold hover:underline"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-xl bg-[#22c55e] text-white font-bold text-sm shadow hover:bg-[#1eb354] transition mt-2"
+                >
+                  Sign In to FitMap
+                </button>
+              </form>
+            ) : (
+              /* Registration Form with Role Selection */
+              <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={regName}
+                    onChange={(e) => setRegName(e.target.value)}
+                    placeholder="e.g. Maria Santos"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={regEmail}
+                    onChange={(e) => setRegEmail(e.target.value)}
+                    placeholder="maria@example.com"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={regPassword}
+                    onChange={(e) => setRegPassword(e.target.value)}
+                    placeholder="At least 6 characters"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">I want to join as</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(["Member", "Trainer", "Gym Owner"] as Role[]).map((r) => (
+                      <button
+                        type="button"
+                        key={r}
+                        onClick={() => setRegRole(r)}
+                        className={`p-2.5 rounded-xl text-xs font-bold border transition text-center ${
+                          regRole === r
+                            ? "bg-[#22c55e] text-[#0d2116] border-[#22c55e]"
+                            : "bg-gray-50 border-gray-200 text-gray-600"
+                        }`}
+                      >
+                        {r === "Member" ? "🏋️ Member" : r === "Trainer" ? "🥊 Trainer" : "🏢 Gym Owner"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {regRole !== "Member" && (
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      {regRole === "Trainer" ? "Specialty (e.g. Strength / Boxing)" : "Gym Facility Name"}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={regDetail}
+                      onChange={(e) => setRegDetail(e.target.value)}
+                      placeholder={regRole === "Trainer" ? "Strength & Conditioning" : "Iron Zone Fitness"}
+                      className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                    />
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-xl bg-[#22c55e] text-white font-bold text-sm shadow hover:bg-[#1eb354] transition mt-2"
+                >
+                  Create {regRole} Account
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 2. FORGOT PASSWORD MODAL */}
+      {forgotModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setForgotModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setForgotModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
+            >
+              <Icon name="x" className="size-5" />
+            </button>
+            <div className="text-center mb-5">
+              <div className="size-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                🔑
+              </div>
+              <h2 className="text-xl font-black text-gray-900">Password Recovery</h2>
+              <p className="text-xs text-gray-500 mt-1">Enter your registered email to receive reset instructions.</p>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setForgotModalOpen(false);
+                notify(`Password reset link dispatched to ${forgotEmail || "your email"}.`);
+              }}
+              className="space-y-3"
+            >
+              <input
+                type="email"
+                required
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+              />
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl bg-[#22c55e] text-white font-bold text-sm shadow hover:bg-[#1eb354]"
+              >
+                Send Recovery Instructions
+              </button>
             </form>
-            <div className="mt-5 flex items-center justify-center gap-2 text-xs text-[#8b5b20]"><span className="size-2 rounded-full bg-[#e2a441]" /> Preview only — do not enter real passwords or personal information</div>
-            <div className="mt-6 border-t border-black/5 pt-5">
-              <div className="flex items-center justify-between gap-3"><div><p className="text-sm font-semibold">Role preview</p><p className="mt-1 text-xs text-[#718078]">Frontend-only test access; no real authentication or payments.</p></div><span className="rounded-full bg-[#fff1cb] px-2 py-1 text-[10px] font-bold text-[#7a5a14]">DEMO</span></div>
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {(["Member", "Trainer", "Gym Owner", "Admin"] as const).map((role) => <button type="button" onClick={() => enterRolePreview(role)} key={role} className="rounded-xl border border-black/10 px-3 py-3 text-xs font-semibold hover:border-[#59806f] hover:bg-[#f7f8f4]">Continue as {role}</button>)}
+          </div>
+        </div>
+      )}
+
+      {/* 3. GYM DETAIL MODAL */}
+      {selectedGymForModal && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setSelectedGymForModal(null)}
+        >
+          {(() => {
+            const gym = gymsList.find((g) => g.id === selectedGymForModal)!;
+            return (
+              <div
+                className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setSelectedGymForModal(null)}
+                  className="absolute top-4 right-4 size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
+                >
+                  <Icon name="x" className="size-5" />
+                </button>
+                <div className="h-56 rounded-2xl overflow-hidden mb-6 relative">
+                  <img src={gym.image} alt={gym.name} className="size-full object-cover" />
+                  <span className="absolute bottom-3 left-3 bg-black/70 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-full">
+                    {gym.tag}
+                  </span>
+                </div>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h2 className="text-2xl font-black text-gray-900">{gym.name}</h2>
+                    <p className="text-xs text-gray-500 mt-1">📍 {gym.address}</p>
+                    <p className="text-xs text-emerald-700 font-semibold mt-1">● {gym.open} · 📞 {gym.phone}</p>
+                  </div>
+                  <span className="text-sm font-bold text-amber-500">★ {gym.rating} ({gym.reviews} reviews)</span>
+                </div>
+
+                <div className="mt-5">
+                  <h3 className="font-bold text-sm text-gray-800 mb-2">Available Facilities</h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {gym.facilities.map((f) => (
+                      <span key={f} className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium">
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-sm text-gray-500">Day pass from <b className="text-xl text-gray-900">₱{gym.price}</b></span>
+                  <button
+                    onClick={() => {
+                      setSelectedGymForModal(null);
+                      if (!signedIn) {
+                        setAuthModalOpen(true);
+                      } else {
+                        setBookingModalGym(gym.id);
+                        setBookingModalTrainer(1);
+                      }
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-[#22c55e] text-white font-bold text-xs shadow hover:bg-[#1eb354]"
+                  >
+                    Book Pass / Coach at this Gym
+                  </button>
+                </div>
               </div>
-            </div>
-          </section>
+            );
+          })()}
         </div>
       )}
 
-      {reportsOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-[#0d2119]/50 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setReportsOpen(false)}>
-          <section onMouseDown={(e) => e.stopPropagation()} className="w-full max-w-2xl rounded-t-3xl bg-[#f7f8f4] p-6 shadow-2xl sm:rounded-3xl sm:p-8">
-            <div className="mb-7 flex items-start justify-between">
-              <div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Admin tools</p><h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">Reports center</h2><p className="mt-2 text-sm text-[#68766f]">A live overview of memberships, bookings, and customers.</p></div>
-              <button onClick={() => setReportsOpen(false)} className="grid size-9 place-items-center rounded-full bg-white text-lg">×</button>
-            </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[["1,284", "Members"], ["342", "Bookings"], ["48", "Trainers"], ["₱684K", "Revenue"]].map(([value, label]) => <div key={label} className="rounded-2xl bg-white p-4"><p className="text-2xl font-bold tracking-tight">{value}</p><p className="mt-1 text-xs text-[#718078]">{label} this month</p></div>)}
-            </div>
-            <div className="mt-4 overflow-hidden rounded-2xl bg-white">
-              {["Membership performance", "Trainer schedules", "Customer statistics"].map((report, i) => <div key={report} className="flex items-center justify-between border-b border-black/5 p-4 last:border-0"><div><p className="text-sm font-semibold">{report}</p><p className="mt-1 text-xs text-[#7a867f]">Updated {i === 0 ? "just now" : `${i + 1} hours ago`}</p></div><button onClick={() => notify(`${report} report generated successfully.`)} className="rounded-xl border border-black/10 px-3 py-2 text-xs font-semibold hover:bg-[#f0f2ed]">Generate PDF</button></div>)}
-            </div>
-          </section>
-        </div>
-      )}
-
-      {panel && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-[#0d2119]/50 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setPanel(null)}>
-          <section onMouseDown={(e) => e.stopPropagation()} className={`w-full rounded-t-3xl bg-[#f7f8f4] p-6 shadow-2xl sm:rounded-3xl sm:p-8 ${panel === "memberships" ? "max-w-3xl" : "max-w-xl"}`}>
-            <div className="mb-6 flex items-start justify-between">
+      {/* 4. BOOKING MODAL */}
+      {bookingModalTrainer && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setBookingModalTrainer(null)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setBookingModalTrainer(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
+            >
+              <Icon name="x" className="size-5" />
+            </button>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="size-11 rounded-2xl bg-emerald-50 text-[#22c55e] flex items-center justify-center font-bold text-xl">
+                📅
+              </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">FitMap account</p>
-                <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">
-                  {panel === "bookings" ? "My bookings" : panel === "memberships" ? "Membership plans" : panel === "notifications" ? "Notifications" : "My profile"}
-                </h2>
+                <h3 className="font-black text-lg text-gray-900">Book Training Session</h3>
+                <p className="text-xs text-gray-500">
+                  {trainersList.find((t) => t.id === bookingModalTrainer)?.name} · Iron Zone Fitness
+                </p>
               </div>
-              <button onClick={() => setPanel(null)} aria-label="Close" className="grid size-9 place-items-center rounded-full bg-white text-lg">×</button>
             </div>
 
-            {panel === "bookings" && <div className="rounded-2xl bg-white p-5"><div className="flex items-start justify-between gap-4"><div><span className="rounded-full bg-[#e7f1b2] px-2.5 py-1 text-xs font-bold text-[#345442]">CONFIRMED</span><h3 className="mt-3 text-lg font-semibold">Pulse Fitness Hub</h3><p className="mt-1 text-sm text-[#718078]">Tomorrow · 2:30 PM · Day pass</p></div><button onClick={() => notify("Booking added to your calendar.")} className="rounded-xl border border-black/10 px-3 py-2 text-xs font-semibold">Add to calendar</button></div><button onClick={() => { setPanel(null); setBooking(true); }} className="mt-5 w-full rounded-xl bg-[#153c2e] py-3 text-sm font-semibold text-white">Manage booking</button></div>}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const tr = trainersList.find((t) => t.id === bookingModalTrainer)!;
+                const newB: BookingItem = {
+                  id: Date.now(),
+                  customerName: currentUser.name,
+                  gymName: tr.gymName,
+                  trainerName: tr.name,
+                  sessionType: bookingTypeInput,
+                  date: bookingDateInput,
+                  time: bookingTimeInput,
+                  status: "Confirmed",
+                  price: tr.hourlyRate,
+                };
+                setBookings((prev) => [newB, ...prev]);
+                setBookingModalTrainer(null);
+                notify(`Session confirmed with ${tr.name} on ${bookingDateInput}!`);
+                setActiveTab("bookings");
+              }}
+              className="space-y-3.5"
+            >
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Select Date</label>
+                <input
+                  type="date"
+                  required
+                  value={bookingDateInput}
+                  onChange={(e) => setBookingDateInput(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none"
+                />
+              </div>
 
-            {panel === "memberships" && <div>
-              {activeMembership && <div className="mb-4 flex items-center justify-between rounded-2xl bg-[#edf3d1] p-4"><div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Active membership</p><p className="mt-1 font-semibold">{activeMembership.gym} · {activeMembership.plan}</p></div><span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#345442]">Active</span></div>}
-              <div className="space-y-4">{gyms.map((gym, gymIndex) => <article key={gym.id} className="overflow-hidden rounded-2xl bg-white"><div className="flex items-center gap-3 border-b border-black/5 p-4"><img src={gym.image} alt="" className="size-14 rounded-xl object-cover" /><div className="min-w-0"><h3 className="truncate font-semibold">{gym.name}</h3><p className="mt-1 text-xs text-[#718078]">{gym.area} · {gym.rating} rating</p></div></div><div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-4">{[["Daily", `₱${gym.price}`], ["Weekly", `₱${gymIndex === 0 ? "799" : gymIndex === 1 ? "899" : "699"}`], ["Monthly", `₱${gymIndex === 0 ? "2,499" : gymIndex === 1 ? "2,799" : "2,199"}`], ["Yearly", `₱${gymIndex === 0 ? "24,990" : gymIndex === 1 ? "27,990" : "21,990"}`]].map(([plan, price]) => <button onClick={() => setMembershipCheckout({ gym: gym.name, plan, price })} key={plan} className="rounded-xl border border-black/5 p-3 text-left hover:border-[#59806f] hover:bg-[#f7f8f4]"><span className="block text-xs font-semibold">{plan}</span><span className="mt-1 block text-sm font-bold">{price}</span></button>)}</div></article>)}</div>
-            </div>}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Time Slot</label>
+                <select
+                  value={bookingTimeInput}
+                  onChange={(e) => setBookingTimeInput(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none bg-white"
+                >
+                  <option value="08:00 AM">08:00 AM - 10:00 AM</option>
+                  <option value="09:30 AM">09:30 AM - 11:30 AM</option>
+                  <option value="02:00 PM">02:00 PM - 04:00 PM</option>
+                  <option value="04:00 PM">04:00 PM - 06:00 PM</option>
+                </select>
+              </div>
 
-            {panel === "notifications" && <div className="space-y-2">{[["Booking confirmed", "Your Pulse Fitness Hub pass is ready.", "Just now"], ["New gym nearby", "The Foundry is now available in Makati.", "2h"], ["Membership offer", "Save 23% on a weekly fitness pass.", "Yesterday"]].map(([title, body, time]) => <button onClick={() => notify(`Opened: ${title}`)} key={title} className="flex w-full items-start gap-3 rounded-2xl bg-white p-4 text-left"><span className="mt-1 size-2 rounded-full bg-[#f27c54]" /><span className="flex-1"><b className="block text-sm">{title}</b><span className="mt-1 block text-xs text-[#718078]">{body}</span></span><small className="text-[#88938d]">{time}</small></button>)}</div>}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Session Program Focus</label>
+                <select
+                  value={bookingTypeInput}
+                  onChange={(e) => setBookingTypeInput(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:border-emerald-500 outline-none bg-white"
+                >
+                  <option value="Personal Training (1-on-1)">Personal Training (1-on-1)</option>
+                  <option value="Strength & Mobility Assessment">Strength & Mobility Assessment</option>
+                  <option value="Hypertrophy Technique Check">Hypertrophy Technique Check</option>
+                </select>
+              </div>
 
-            {panel === "profile" && <div className="rounded-2xl bg-white p-5"><div className="flex items-center gap-4"><span className="grid size-14 place-items-center rounded-full bg-[#e4efb1] font-bold">AM</span><div><h3 className="font-semibold">Alex Morgan</h3><p className="text-sm text-[#718078]">alex.morgan@example.com</p><span className="mt-2 inline-block rounded-full bg-[#eef1eb] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">{roleApplications[roleApplications.length - 1]?.status === "Approved" ? applicationRole : "Member"}</span></div></div>{applicationSent && <div className={`mt-5 rounded-xl p-3 text-xs font-medium ${roleApplications[roleApplications.length - 1]?.status === "Approved" ? "bg-[#edf3d1] text-[#345442]" : roleApplications[roleApplications.length - 1]?.status === "Declined" ? "bg-[#ffe2dc] text-[#8b3f31]" : "bg-[#fff5d9] text-[#765a1c]"}`}>{applicationRole} application status: {roleApplications[roleApplications.length - 1]?.status ?? "Pending"}.</div>}<div className="mt-5 grid grid-cols-2 gap-3"><button onClick={() => notify("Profile editing enabled.")} className="rounded-xl border border-black/10 py-3 text-sm font-semibold">Edit profile</button><button onClick={() => { setPanel(null); setApplicationOpen(true); }} className="rounded-xl border border-black/10 py-3 text-sm font-semibold">Request role</button>{roleApplications[roleApplications.length - 1]?.status === "Approved" && <button onClick={() => { setPanel(null); setRoleDashboardOpen(true); }} className="col-span-2 rounded-xl bg-[#dff86a] py-3 text-sm font-semibold text-[#153c2e]">Open {applicationRole} dashboard</button>}{applicationRole === "Gym Owner" && roleApplications[roleApplications.length - 1]?.status === "Approved" && <button onClick={() => { setPanel(null); setLocationEditorOpen(true); }} className="col-span-2 rounded-xl border border-black/10 py-3 text-sm font-semibold">Manage gym location</button>}<button onClick={() => { setSignedIn(false); setPanel(null); notify("You have been signed out."); }} className="col-span-2 rounded-xl bg-[#153c2e] py-3 text-sm font-semibold text-white">Sign out</button></div></div>}
-          </section>
-        </div>
-      )}
+              <div className="p-3 bg-emerald-50 rounded-xl flex items-center justify-between text-xs text-emerald-950 font-bold">
+                <span>Session Rate</span>
+                <span>₱600.00</span>
+              </div>
 
-      {applicationOpen && (
-        <div className="fixed inset-0 z-[60] grid place-items-end bg-[#0d2119]/55 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setApplicationOpen(false)}>
-          <section onMouseDown={(e) => e.stopPropagation()} className="max-h-[95vh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8">
-            {applicationSent ? <div className="py-8 text-center">
-              <div className="mx-auto mb-5 grid size-16 place-items-center rounded-full bg-[#dff86a] text-[#153c2e]"><Icon name="check" className="size-8" /></div>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Application received</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em]">Submitted successfully!</h2>
-              <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#718078]">Your {applicationRole} request and supporting proofs were sent to the FitMap administrators for verification. You can track its status from your profile.</p>
-              <div className="mx-auto mt-6 max-w-sm rounded-xl bg-[#fff5d9] p-3 text-sm font-semibold text-[#765a1c]">Status: Pending administrator review</div>
-              <button onClick={() => setApplicationOpen(false)} className="mt-6 w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Return to FitMap</button>
-            </div> : <>
-            <div className="mb-6 flex items-start justify-between"><div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Partner verification</p><h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">Request a professional role</h2><p className="mt-2 text-sm text-[#718078]">Your account remains a Member until an administrator verifies your documents.</p></div><button onClick={() => setApplicationOpen(false)} className="grid size-9 shrink-0 place-items-center rounded-full bg-[#f0f2ed] text-lg">×</button></div>
-            <div className="mb-5 grid grid-cols-2 gap-2">
-              {(["Trainer", "Gym Owner"] as const).map((role) => <button key={role} onClick={() => setApplicationRole(role)} className={`rounded-xl border p-4 text-left ${applicationRole === role ? "border-[#153c2e] bg-[#edf3d1]" : "border-black/10"}`}><b className="block text-sm">{role}</b><span className="mt-1 block text-xs text-[#718078]">{role === "Trainer" ? "Offer coaching services" : "List and manage a gym"}</span></button>)}
-            </div>
-            <form onSubmit={(e) => { e.preventDefault(); setApplicationSent(true); setRoleApplications((items) => [...items, { id: Date.now(), applicant: "Alex Morgan", role: applicationRole, proof: "Supporting documents uploaded", status: "Pending" }]); notify(`${applicationRole} request submitted for admin review.`); }} className="space-y-4">
-              <label className="block"><span className="mb-1.5 block text-sm font-semibold">{applicationRole === "Trainer" ? "Professional specialty" : "Registered gym name"}</span><input required placeholder={applicationRole === "Trainer" ? "e.g. Strength and conditioning" : "Enter official business name"} className="h-12 w-full rounded-xl border border-black/10 bg-[#fafbf8] px-4 text-sm outline-none focus:border-[#59806f]" /></label>
-              <label className="block"><span className="mb-1.5 block text-sm font-semibold">{applicationRole === "Trainer" ? "Years of experience" : "Business registration number"}</span><input required placeholder={applicationRole === "Trainer" ? "e.g. 5 years" : "Enter registration number"} className="h-12 w-full rounded-xl border border-black/10 bg-[#fafbf8] px-4 text-sm outline-none focus:border-[#59806f]" /></label>
-              <label className="block"><span className="mb-1.5 block text-sm font-semibold">Supporting proofs</span><span className="mb-2 block text-xs leading-5 text-[#718078]">{applicationRole === "Trainer" ? "Upload a valid ID, certifications, and relevant training credentials." : "Upload a valid ID, business permit, registration, and proof of gym ownership."}</span><input required multiple type="file" accept=".pdf,.jpg,.jpeg,.png" className="w-full rounded-xl border border-dashed border-black/15 bg-[#fafbf8] p-4 text-xs file:mr-3 file:rounded-lg file:border-0 file:bg-[#153c2e] file:px-3 file:py-2 file:font-semibold file:text-white" /></label>
-              <label className="flex items-start gap-2 text-xs leading-5 text-[#68766f]"><input required type="checkbox" className="mt-1 accent-[#153c2e]" /> I certify that the information and proofs provided are authentic and may be verified by FitMap administrators.</label>
-              <button type="submit" className="w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Submit for verification</button>
+              <button
+                type="submit"
+                className="w-full py-3.5 rounded-xl bg-[#22c55e] text-white font-bold text-sm shadow hover:bg-[#1eb354]"
+              >
+                Confirm & Reserve Slot
+              </button>
             </form>
-            </>}
-          </section>
+          </div>
         </div>
       )}
 
-      {gymDetails && (() => {
-        const gym = gyms.find((item) => item.id === gymDetails)!;
-        const pin = gym.id === 1 ? { x: `${ownerGymLocation.x}%`, y: `${ownerGymLocation.y}%` } : { x: gym.x, y: gym.y };
-        return <div className="fixed inset-0 z-[60] grid place-items-end bg-[#0d2119]/55 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setGymDetails(null)}>
-          <section onMouseDown={(e) => e.stopPropagation()} className="max-h-[95vh] w-full max-w-3xl overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl">
-            <div className="relative h-56"><img src={gym.image} alt={`${gym.name} interior`} className="size-full object-cover sm:rounded-t-3xl" /><button onClick={() => setGymDetails(null)} className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-white/90 text-lg shadow">×</button></div>
-            <div className="p-6 sm:p-8"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start"><div><span className="rounded-full bg-[#edf3d1] px-3 py-1 text-xs font-semibold text-[#345442]">Verified gym</span><h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">{gym.name}</h2><p className="mt-2 text-sm text-[#718078]">{gym.area} · {gym.distance} km away · {gym.open}</p></div><div className="flex items-center gap-1 font-semibold"><Icon name="star" className="size-4 fill-[#f4bd50] stroke-[#f4bd50]" /> {gym.rating} <span className="text-sm font-normal text-[#718078]">({gym.reviews} reviews)</span></div></div>
-              <div className="mt-7 grid gap-5 md:grid-cols-[1fr_1.1fr]"><div><h3 className="font-semibold">About this gym</h3><p className="mt-2 text-sm leading-6 text-[#718078]">A modern fitness space with quality equipment, expert trainers, clean facilities, and flexible membership options for every fitness level.</p><div className="mt-5 flex flex-wrap gap-2">{["Cardio", "Strength area", "Locker rooms", "Personal training"].map((item) => <span key={item} className="rounded-full bg-[#f0f2ed] px-3 py-1.5 text-xs font-medium">{item}</span>)}</div></div><div><h3 className="mb-2 font-semibold">Gym location</h3><div className="map-grid relative h-48 overflow-hidden rounded-2xl border border-black/5"><span style={{ left: pin.x, top: pin.y }} className="absolute z-10 grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#153c2e] text-[#dff86a] shadow-lg ring-4 ring-white"><Icon name="pin" className="size-5" /></span></div><p className="mt-2 flex items-start gap-2 text-xs leading-5 text-[#718078]"><Icon name="pin" className="mt-0.5 size-3.5 shrink-0" />{gym.id === 1 ? ownerGymLocation.address : `${gym.area}, Metro Manila`}</p></div></div>
-              <div className="mt-7"><div className="mb-3"><h3 className="font-semibold">Membership plans</h3><p className="mt-1 text-xs text-[#718078]">Choose the access period that works for you.</p></div><div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{[["Daily", `₱${gym.price}`], ["Weekly", `₱${gym.id === 1 ? "799" : gym.id === 2 ? "899" : "699"}`], ["Monthly", `₱${gym.id === 1 ? "2,499" : gym.id === 2 ? "2,799" : "2,199"}`], ["Yearly", `₱${gym.id === 1 ? "24,990" : gym.id === 2 ? "27,990" : "21,990"}`]].map(([plan, price]) => <button onClick={() => { setGymDetails(null); signedIn ? setMembershipCheckout({ gym: gym.name, plan, price }) : setAuthOpen(true); }} key={plan} className="rounded-xl border border-black/10 p-3 text-left transition hover:border-[#153c2e] hover:bg-[#edf3d1]"><span className="block text-xs font-semibold">{plan}</span><span className="mt-1 block text-lg font-bold">{price}</span><span className="mt-1 block text-[10px] text-[#718078]">Select plan</span></button>)}</div></div>
-              <div className="mt-7"><div className="mb-3 flex items-center justify-between"><h3 className="font-semibold">Available trainers</h3><span className="text-xs text-[#718078]">Schedules updated today</span></div><div className="grid gap-2 sm:grid-cols-2">{[["Coach Michael Reyes", "Strength & conditioning", "Today · 4:00 PM"], ["Coach Sarah Lim", "Mobility & weight loss", "Tomorrow · 9:30 AM"]].map(([name, specialty, schedule]) => <button onClick={() => { setGymDetails(null); setTrainerDetails(name); }} key={name} className="flex items-center justify-between rounded-2xl border border-black/5 p-3 text-left hover:bg-[#f7f8f4]"><div><p className="text-sm font-semibold">{name}</p><p className="mt-1 text-xs text-[#718078]">{specialty}</p></div><div className="text-right"><p className="text-xs font-semibold text-[#3f705b]">{schedule}</p><p className="mt-1 text-[10px] text-[#718078]">View schedule</p></div></button>)}</div></div>
-              <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl bg-[#f4f6f1] p-4 sm:flex-row"><p><span className="text-2xl font-bold">₱{gym.price}</span><span className="text-sm text-[#718078]"> / daily access</span></p><button onClick={() => { setGymDetails(null); setBooking(true); }} className="w-full rounded-xl bg-[#153c2e] px-6 py-3 text-sm font-semibold text-white sm:w-auto">Book this gym</button></div>
-            </div>
-          </section>
-        </div>;
-      })()}
-
-      {trainerDetails && <div className="fixed inset-0 z-[60] grid place-items-end bg-[#0d2119]/55 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setTrainerDetails(null)}>
-        <section onMouseDown={(e) => e.stopPropagation()} className="max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8">
-          <div className="flex items-start justify-between"><div><span className="rounded-full bg-[#edf3d1] px-3 py-1 text-xs font-semibold text-[#345442]">Verified trainer</span><h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">{trainerDetails}</h2><p className="mt-2 text-sm text-[#718078]">Strength & conditioning · 8 years experience</p></div><button onClick={() => setTrainerDetails(null)} className="grid size-9 place-items-center rounded-full bg-[#f0f2ed] text-lg">×</button></div>
-          <div className="mt-5 flex flex-wrap gap-3 text-sm"><span className="flex items-center gap-1 rounded-full bg-[#f7f8f4] px-3 py-2"><Icon name="star" className="size-4 fill-[#f4bd50] stroke-[#f4bd50]" /> 4.9 rating</span><span className="rounded-full bg-[#f7f8f4] px-3 py-2">126 reviews</span><span className="rounded-full bg-[#f7f8f4] px-3 py-2">342 sessions</span></div>
-          <div className="mt-6 rounded-2xl bg-[#f7f8f4] p-4"><p className="text-xs font-semibold uppercase tracking-wider text-[#59806f]">Assigned gym</p><p className="mt-2 font-semibold">Pulse Fitness Hub</p><p className="mt-1 text-xs text-[#718078]">32nd Street, BGC · 0.8 km away</p><button onClick={() => { setTrainerDetails(null); setGymDetails(1); }} className="mt-3 text-xs font-semibold text-[#3f705b]">View gym details</button></div>
-          <div className="mt-6"><h3 className="font-semibold">Available schedule</h3><div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">{["Today · 4:00 PM", "Tomorrow · 9:30 AM", "Tomorrow · 2:00 PM", "May 27 · 10:00 AM", "May 27 · 5:30 PM", "May 28 · 1:00 PM"].map((slot, i) => <button onClick={() => notify(`${slot} selected.`)} key={slot} className={`rounded-xl border p-3 text-xs font-semibold ${i === 1 ? "border-[#153c2e] bg-[#edf3d1]" : "border-black/10 hover:border-[#59806f]"}`}>{slot}</button>)}</div></div>
-          <button onClick={() => signedIn ? (setTrainerDetails(null), setBooking(true)) : (setTrainerDetails(null), setAuthOpen(true))} className="mt-6 w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Book this trainer</button>
-        </section>
-      </div>}
-
-      {locationEditorOpen && <div className="fixed inset-0 z-[60] grid place-items-end bg-[#0d2119]/55 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setLocationEditorOpen(false)}>
-        <section onMouseDown={(e) => e.stopPropagation()} className="w-full max-w-2xl rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8">
-          <div className="mb-5 flex items-start justify-between"><div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Gym Owner tools</p><h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em]">Pin your gym location</h2><p className="mt-2 text-sm text-[#718078]">Click anywhere on the map to place the exact public location pin.</p></div><button onClick={() => setLocationEditorOpen(false)} className="grid size-9 place-items-center rounded-full bg-[#f0f2ed] text-lg">×</button></div>
-          <div onClick={(e) => { const box = e.currentTarget.getBoundingClientRect(); setOwnerGymLocation((value) => ({ ...value, x: ((e.clientX - box.left) / box.width) * 100, y: ((e.clientY - box.top) / box.height) * 100 })); }} className="map-grid relative h-72 cursor-crosshair overflow-hidden rounded-2xl border border-black/5"><span style={{ left: `${ownerGymLocation.x}%`, top: `${ownerGymLocation.y}%` }} className="absolute z-10 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#153c2e] text-[#dff86a] shadow-xl ring-4 ring-white"><Icon name="pin" className="size-5" /></span></div>
-          <label className="mt-4 block"><span className="mb-1.5 block text-sm font-semibold">Complete gym address</span><input value={ownerGymLocation.address} onChange={(e) => setOwnerGymLocation((value) => ({ ...value, address: e.target.value }))} className="h-12 w-full rounded-xl border border-black/10 bg-[#fafbf8] px-4 text-sm outline-none focus:border-[#59806f]" /></label>
-          <button onClick={() => { setLocationEditorOpen(false); notify("Gym location saved and is now visible to users."); }} className="mt-5 w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Save public location</button>
-        </section>
-      </div>}
-
-      {roleDashboardOpen && <div className="fixed inset-0 z-[60] overflow-y-auto bg-[#eef1eb]">
-        <header className="sticky top-0 z-10 border-b border-black/5 bg-white/90 backdrop-blur-xl"><div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-5"><div className="flex items-center gap-3"><div className="grid size-10 place-items-center rounded-xl bg-[#153c2e] text-[#dff86a]"><Icon name={applicationRole === "Trainer" ? "users" : "dumbbell"} /></div><div><p className="font-bold">FitMap {applicationRole}</p><p className="text-xs text-[#718078]">Professional dashboard</p></div></div><button onClick={() => setRoleDashboardOpen(false)} className="rounded-xl border border-black/10 px-4 py-2.5 text-sm font-semibold">Back to FitMap</button></div></header>
-        <div className="mx-auto max-w-6xl px-5 py-8">
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">{applicationRole} workspace</p><h2 className="mt-1 text-4xl font-semibold tracking-[-0.045em]">Welcome back, Alex.</h2><p className="mt-2 text-sm text-[#718078]">{applicationRole === "Trainer" ? "Manage clients, sessions, availability, and your professional reputation." : "Monitor your gym, reservations, members, trainers, and membership performance."}</p></div><button onClick={() => notify(applicationRole === "Trainer" ? "Availability calendar opened." : "Gym editing tools opened.")} className="rounded-xl bg-[#153c2e] px-5 py-3 text-sm font-semibold text-white">{applicationRole === "Trainer" ? "Update availability" : "Edit gym profile"}</button></div>
-
-          {applicationRole === "Trainer" ? <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[["4.9", "Average rating", "126 reviews"], ["18", "Sessions this week", "+4 from last week"], ["42", "Active clients", "8 new this month"], ["₱28,450", "Monthly earnings", "+14.2%"]].map(([value, label, detail]) => <article key={label} className="rounded-3xl bg-white p-5 shadow-sm"><p className="text-sm text-[#718078]">{label}</p><p className="mt-3 text-3xl font-bold tracking-[-0.04em]">{value}</p><p className="mt-2 text-xs font-medium text-[#4c8069]">{detail}</p></article>)}</div>
-            <div className="mt-5 grid gap-5 lg:grid-cols-[1.35fr_.65fr]"><article className="rounded-3xl bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><h3 className="text-lg font-semibold">Upcoming sessions</h3><p className="mt-1 text-xs text-[#718078]">Today’s confirmed bookings</p></div><button onClick={() => notify("Full trainer calendar opened.")} className="text-xs font-semibold text-[#3f705b]">View calendar</button></div><div className="mt-5 space-y-3">{[["Jamie Santos", "Strength assessment", "9:00 AM"], ["Chris Tan", "Upper body program", "1:30 PM"], ["Bea Cruz", "Functional training", "4:00 PM"]].map(([client, session, time]) => <div key={client} className="flex items-center justify-between rounded-2xl bg-[#f7f8f4] p-4"><div><p className="text-sm font-semibold">{client}</p><p className="mt-1 text-xs text-[#718078]">{session}</p></div><div className="text-right"><p className="text-sm font-bold">{time}</p><button onClick={() => notify(`${client}'s session details opened.`)} className="mt-1 text-xs text-[#3f705b]">View booking</button></div></div>)}</div></article><article className="rounded-3xl bg-[#153c2e] p-6 text-white shadow-sm"><h3 className="text-lg font-semibold">Rating overview</h3><div className="mt-6 flex items-end gap-2"><span className="text-5xl font-bold">4.9</span><span className="pb-1 text-sm text-white/55">/ 5.0</span></div><div className="mt-4 flex gap-1 text-[#dff86a]">{[1,2,3,4,5].map((star) => <Icon key={star} name="star" className="size-5 fill-current" />)}</div><p className="mt-5 text-sm leading-6 text-white/60">“Excellent guidance and a program that actually fits my schedule.”</p><button onClick={() => notify("All trainer reviews opened.")} className="mt-5 w-full rounded-xl bg-white/10 py-3 text-sm font-semibold">Read all 126 reviews</button></article></div>
-            <div className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_.8fr]">
-              <article className="rounded-3xl bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><h3 className="text-lg font-semibold">Pending booking requests</h3><p className="mt-1 text-xs text-[#718078]">Accept or decline new client requests</p></div><span className="rounded-full bg-[#fff1cb] px-3 py-1 text-xs font-semibold text-[#7a5a14]">{trainerRequests.filter((item) => item.status === "Pending").length} pending</span></div><div className="mt-5 space-y-3">{trainerRequests.map((request) => <div key={request.id} className="rounded-2xl border border-black/5 p-4"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><p className="text-sm font-semibold">{request.client}</p><p className="mt-1 text-xs text-[#718078]">{request.session} · {request.schedule}</p></div>{request.status === "Pending" ? <div className="flex gap-2"><button onClick={() => setTrainerRequests((items) => items.map((item) => item.id === request.id ? {...item, status: "Declined"} : item))} className="rounded-lg border border-[#d66d58]/30 px-3 py-2 text-xs font-semibold text-[#9c4938]">Decline</button><button onClick={() => { setTrainerRequests((items) => items.map((item) => item.id === request.id ? {...item, status: "Accepted"} : item)); notify(`${request.client}'s booking was added to your schedule.`); }} className="rounded-lg bg-[#153c2e] px-3 py-2 text-xs font-semibold text-white">Accept</button></div> : <span className={`rounded-full px-3 py-1 text-xs font-semibold ${request.status === "Accepted" ? "bg-[#edf3d1] text-[#345442]" : "bg-[#ffe2dc] text-[#8b3f31]"}`}>{request.status}</span>}</div></div>)}</div></article>
-              <article className="rounded-3xl bg-white p-6 shadow-sm"><h3 className="text-lg font-semibold">Weekly availability</h3><p className="mt-1 text-xs text-[#718078]">Your public booking schedule</p><div className="mt-5 space-y-2">{[["Monday", "9 AM – 5 PM"], ["Tuesday", "1 PM – 7 PM"], ["Wednesday", "Unavailable"], ["Thursday", "9 AM – 5 PM"], ["Friday", "10 AM – 4 PM"]].map(([day, time]) => <button onClick={() => notify(`${day} availability editor opened.`)} key={day} className="flex w-full justify-between rounded-xl bg-[#f7f8f4] p-3 text-sm"><span className="font-semibold">{day}</span><span className="text-[#718078]">{time}</span></button>)}</div></article>
-            </div>
-          </> : <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[["₱184,600", "Monthly revenue", "+11.8%"], ["87", "Active members", "+9 this month"], ["64", "Bookings this week", "+16.4%"], ["6", "Active trainers", "All verified"]].map(([value, label, detail]) => <article key={label} className="rounded-3xl bg-white p-5 shadow-sm"><p className="text-sm text-[#718078]">{label}</p><p className="mt-3 text-3xl font-bold tracking-[-0.04em]">{value}</p><p className="mt-2 text-xs font-medium text-[#4c8069]">{detail}</p></article>)}</div>
-            <div className="mt-5 grid gap-5 lg:grid-cols-[1.3fr_.7fr]"><article className="rounded-3xl bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><h3 className="text-lg font-semibold">Recent reservations</h3><p className="mt-1 text-xs text-[#718078]">Latest member activity</p></div><button onClick={() => notify("All gym reservations opened.")} className="text-xs font-semibold text-[#3f705b]">View all</button></div><div className="mt-5 space-y-3">{[["Jamie Santos", "Monthly membership", "Paid"], ["Chris Tan", "Day pass · May 26", "Confirmed"], ["Bea Cruz", "Weekly membership", "Paid"]].map(([member, booking, status]) => <div key={member} className="flex items-center justify-between rounded-2xl bg-[#f7f8f4] p-4"><div><p className="text-sm font-semibold">{member}</p><p className="mt-1 text-xs text-[#718078]">{booking}</p></div><span className="rounded-full bg-[#edf3d1] px-3 py-1 text-xs font-semibold text-[#345442]">{status}</span></div>)}</div></article><article className="rounded-3xl bg-white p-6 shadow-sm"><h3 className="text-lg font-semibold">Quick management</h3><div className="mt-5 space-y-2">{["Manage trainers", "Membership plans", "Customer records", "Business reports"].map((item) => <button onClick={() => notify(`${item} opened.`)} key={item} className="flex w-full items-center justify-between rounded-xl border border-black/5 p-3 text-left text-sm font-semibold hover:bg-[#f4f6f1]">{item}<Icon name="chevron" className="size-4" /></button>)}<button onClick={() => { setRoleDashboardOpen(false); setLocationEditorOpen(true); }} className="flex w-full items-center justify-between rounded-xl bg-[#dff86a] p-3 text-left text-sm font-semibold text-[#153c2e]">Update map location<Icon name="pin" className="size-4" /></button></div></article></div>
-            <div className="mt-5 grid gap-5 xl:grid-cols-[1.25fr_.75fr]">
-              <article className="overflow-hidden rounded-3xl bg-white shadow-sm"><div className="border-b border-black/5 p-6"><h3 className="text-lg font-semibold">Membership subscribers</h3><p className="mt-1 text-xs text-[#718078]">All active weekly, monthly, and yearly members</p></div><div className="overflow-x-auto"><table className="w-full min-w-[620px] text-left"><thead><tr>{["Member", "Plan", "Started", "Renewal", "Status"].map((item) => <th key={item} className="border-b border-black/5 px-5 py-3 text-xs uppercase tracking-wider text-[#718078]">{item}</th>)}</tr></thead><tbody>{[["Jamie Santos", "Monthly", "May 2", "Jun 2", "Active"], ["Bea Cruz", "Weekly", "May 20", "May 27", "Active"], ["Nicole Garcia", "Yearly", "Jan 15", "Jan 15, 2027", "Active"], ["Paolo Reyes", "Monthly", "Apr 28", "May 28", "Renewal due"]].map((row) => <tr key={row[0]}>{row.map((cell, i) => <td key={cell} className={`border-b border-black/5 px-5 py-4 text-sm ${i === 0 ? "font-semibold" : "text-[#637169]"}`}>{cell}</td>)}</tr>)}</tbody></table></div></article>
-              <article className="rounded-3xl bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><h3 className="text-lg font-semibold">Trainer schedules</h3><p className="mt-1 text-xs text-[#718078]">Today at Pulse Fitness</p></div><button onClick={() => notify("Trainer management opened.")} className="text-xs font-semibold text-[#3f705b]">Manage</button></div><div className="mt-5 space-y-3">{[["Michael Reyes", "9 AM – 5 PM", "3 sessions"], ["Sarah Lim", "10 AM – 6 PM", "4 sessions"], ["David Cruz", "1 PM – 8 PM", "2 sessions"]].map(([name, hours, load]) => <div key={name} className="rounded-2xl bg-[#f7f8f4] p-4"><div className="flex justify-between"><p className="text-sm font-semibold">{name}</p><span className="text-xs font-semibold text-[#3f705b]">{load}</span></div><p className="mt-1 text-xs text-[#718078]">{hours}</p></div>)}</div></article>
-            </div>
-          </>}
+      {/* TOAST FEEDBACK */}
+      {toastMessage && (
+        <div
+          role="status"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#0d2116] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-[#22c55e]/40"
+        >
+          <span className="text-base text-[#22c55e]">✔</span>
+          <span className="text-xs font-bold">{toastMessage}</span>
         </div>
-      </div>}
-
-      {membershipCheckout && <div className="fixed inset-0 z-[70] grid place-items-end bg-[#0d2119]/55 p-0 backdrop-blur-sm sm:place-items-center sm:p-5" onMouseDown={() => setMembershipCheckout(null)}>
-        <section onMouseDown={(e) => e.stopPropagation()} className="w-full max-w-md rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl sm:p-8">
-          <div className="flex items-start justify-between"><div><p className="text-xs font-bold uppercase tracking-wider text-[#59806f]">Membership checkout</p><h2 className="mt-1 text-2xl font-semibold">Confirm your plan</h2></div><button onClick={() => setMembershipCheckout(null)} className="grid size-9 place-items-center rounded-full bg-[#f0f2ed] text-lg">×</button></div>
-          <div className="mt-6 rounded-2xl bg-[#edf3d1] p-5"><p className="text-sm font-semibold">{membershipCheckout.gym}</p><div className="mt-3 flex items-end justify-between"><div><p className="text-2xl font-bold">{membershipCheckout.plan}</p><p className="mt-1 text-xs text-[#637169]">Starts immediately after confirmation</p></div><p className="text-2xl font-bold">{membershipCheckout.price}</p></div></div>
-          <div className="mt-5"><p className="mb-2 text-sm font-semibold">Payment method</p><label className="flex items-center gap-3 rounded-xl border border-[#153c2e] bg-[#f7f8f4] p-4 text-sm font-semibold"><input defaultChecked type="radio" name="payment" className="accent-[#153c2e]" /> Secure online payment</label></div>
-          <div className="mt-5 flex items-start gap-2 rounded-xl bg-[#f7f8f4] p-3 text-xs leading-5 text-[#718078]"><Icon name="check" className="mt-0.5 size-4 shrink-0 text-[#3f705b]" />Your membership will appear in your account immediately after payment confirmation.</div>
-          <button onClick={() => { setActiveMembership(membershipCheckout); notify(`${membershipCheckout.plan} membership activated at ${membershipCheckout.gym}.`); setMembershipCheckout(null); setPanel("memberships"); }} className="mt-6 w-full rounded-2xl bg-[#153c2e] py-4 font-semibold text-white">Pay {membershipCheckout.price} and activate</button>
-        </section>
-      </div>}
-
-      {toast && <div role="status" className="fixed bottom-5 left-1/2 z-[70] -translate-x-1/2 rounded-full bg-[#14231d] px-5 py-3 text-sm font-semibold text-white shadow-xl">{toast}</div>}
-    </main>
+      )}
+    </div>
   );
 }
