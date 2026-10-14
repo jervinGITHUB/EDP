@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: #f7f8f4; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+.map-grid {
+  background-color: #dfe8dc;
+  background-image:
+    linear-gradient(rgba(255,255,255,.48) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.48) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.map-grid::before,
+.map-grid::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  background: #c9ddc7;
+}
+.map-grid::before { width: 25%; height: 18%; left: 5%; top: 10%; }
+.map-grid::after { width: 30%; height: 22%; right: 5%; bottom: 8%; }
+.road { display: block; background: #f8faf6; box-shadow: 0 0 0 1px rgba(20,35,29,.04); }
