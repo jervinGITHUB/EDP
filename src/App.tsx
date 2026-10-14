@@ -432,7 +432,7 @@ export default function App() {
     price: string;
     status: "Active" | "Expired";
   }>({
-    planName: "Monthly Pass (Unlimited)",
+    planName: "Monthly Pass (30 Days)",
     gymName: "Iron Zone Fitness",
     validUntil: "June 24, 2026",
     price: "₱2,200",
@@ -1022,8 +1022,8 @@ export default function App() {
                         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
                           {[
                             { name: "Day Pass", duration: "1 Day", price: "₱150", desc: "Single entry access" },
-                            { name: "Weekly Fit", duration: "7 Days", price: "₱700", desc: "1 week unlimited workouts" },
-                            { name: "Monthly Unlimited", duration: "30 Days", price: "₱2,200", desc: "Best value for regulars" },
+                            { name: "Weekly Fit", duration: "7 Days", price: "₱700", desc: "7 days full gym access" },
+                            { name: "Monthly Pass (30 Days)", duration: "30 Days", price: "₱2,200", desc: "30 days full gym access" },
                             { name: "Quarterly Pass", duration: "90 Days", price: "₱5,800", desc: "Includes free assessment" },
                           ].map((plan) => (
                             <div
@@ -1698,8 +1698,8 @@ export default function App() {
                           </thead>
                           <tbody className="divide-y divide-gray-100">
                             {[
-                              { name: "John Dela Cruz", plan: "Monthly Unlimited", start: "May 24", renewal: "Jun 24", status: "Active" },
-                              { name: "Jamie Santos", plan: "Monthly Pass", start: "May 2", renewal: "Jun 2", status: "Active" },
+                              { name: "John Dela Cruz", plan: "Monthly Pass (30 Days)", start: "May 24", renewal: "Jun 24", status: "Active" },
+                              { name: "Jamie Santos", plan: "Monthly Pass (30 Days)", start: "May 2", renewal: "Jun 2", status: "Active" },
                               { name: "Bea Cruz", plan: "Weekly Pass", start: "May 20", renewal: "May 27", status: "Renewal Due" },
                               { name: "Nicole Garcia", plan: "Quarterly Pass", start: "Jan 15", renewal: "Apr 15", status: "Active" },
                             ].map((row) => (
@@ -1984,7 +1984,7 @@ export default function App() {
                         <h3 className="font-bold text-gray-900 text-sm mb-3">Membership Breakdown</h3>
                         <div className="space-y-2">
                           {[
-                            { name: "Monthly Pass (Unlimited)", percent: "58%", color: "bg-[#102c22]" },
+                            { name: "Monthly Pass (30 Days)", percent: "58%", color: "bg-[#102c22]" },
                             { name: "Weekly Fit Pass", percent: "27%", color: "bg-[#22c55e]" },
                             { name: "Daily Pass", percent: "15%", color: "bg-[#f59e0b]" },
                           ].map((item) => (
@@ -2163,7 +2163,7 @@ export default function App() {
                             popular: false,
                           },
                           {
-                            name: "Monthly Unlimited",
+                            name: "Monthly Pass (30 Days)",
                             duration: "30 Days",
                             basePrice: "₱2,200",
                             subscribers: "674 Users",
